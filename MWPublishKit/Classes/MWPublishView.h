@@ -32,15 +32,17 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MWPublishView : UIView
 
 /* 文本占位文字 */
-@property (nonatomic, copy, setter=setPlaceHolder:)NSString *placeHolder;
+@property (nonatomic, copy, setter=setPlaceHolder:) NSString *placeHolder;
 /* 文字字体 */
-@property (nonatomic, strong, setter=setTextFont:)UIFont *textFont;
+@property (nonatomic, strong, setter=setTextFont:) UIFont *textFont;
 /* 文字颜色 */
-@property (nonatomic, strong, setter=setTextColor:)UIColor *textColor;
+@property (nonatomic, strong, setter=setTextColor:) UIColor *textColor;
 /* 更多选项数据源 */
 @property (nonatomic, weak) id<MWPublishViewMoreItemDataSource> moreItemDataSource;
 /* 更多选项代理 */
 @property (nonatomic, weak) id<MWPublishViewMoreItemDelegate> moreItemDelegate;
+/* 图片选择器需要，传当前控制器即可 */
+@property (nonatomic, weak) UIViewController *sender;
 
 #pragma mark - init
 - (instancetype)init NS_UNAVAILABLE;

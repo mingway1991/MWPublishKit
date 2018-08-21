@@ -28,6 +28,7 @@
     test.contentObject = [NSURL URLWithString:@"http://pic.ffpic.com/files/tupian/tupian0277.jpg"];
     [publishView configSelectedImageObjects:@[test]];
     [publishView configInputText:@"测试"];
+    publishView.sender = self;
     [self.view addSubview:publishView];
 }
 

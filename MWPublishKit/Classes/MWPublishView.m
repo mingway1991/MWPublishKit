@@ -425,7 +425,7 @@
 - (ZLPhotoActionSheet *)photoActionSheet {
     ZLPhotoActionSheet *photoActionSheet = [[ZLPhotoActionSheet alloc] init];
     photoActionSheet.configuration.maxPreviewCount = 10;
-    photoActionSheet.sender = [UIApplication sharedApplication].keyWindow.rootViewController;
+    photoActionSheet.sender = self.sender;
     return photoActionSheet;
 }
 
