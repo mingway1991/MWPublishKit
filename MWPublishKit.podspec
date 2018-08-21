@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'MWPublishKit'
-  s.version          = '0.1.0'
+  s.version          = '0.2.0'
   s.summary          = '发表文字图片'
 
   s.description      = <<-DESC

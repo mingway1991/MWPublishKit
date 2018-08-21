@@ -56,6 +56,14 @@
 - (void)setup {
     _selectImages = [NSMutableArray array];
     [self addSubview:self.bgScrollView];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+    tapGestureRecognizer.cancelsTouchesInView = NO;
+    [self addGestureRecognizer:tapGestureRecognizer];
+}
+
+#pragma mark - Keyboard
+-(void)keyboardHide:(UITapGestureRecognizer*)tap{
+    [self.inputTextView resignFirstResponder];
 }
 
 #pragma mark - Public Methods
@@ -351,7 +359,7 @@
 #pragma mark - LazyLoad
 - (UIScrollView *)bgScrollView {
     if (!_bgScrollView) {
-        self.bgScrollView = [[UIScrollView alloc] initWithFrame:self.frame];
+        self.bgScrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
         [_bgScrollView addSubview:self.inputTextView];
         _imageItemWidth = ((CGRectGetWidth(_bgScrollView.bounds)-2*PADDING)-10.f)/3.f;
         [_bgScrollView addSubview:self.imageCollectionView];
