@@ -426,6 +426,11 @@
     ZLPhotoActionSheet *photoActionSheet = [[ZLPhotoActionSheet alloc] init];
     photoActionSheet.configuration.maxPreviewCount = 10;
     photoActionSheet.sender = self.sender;
+    photoActionSheet.configuration.allowSelectVideo = NO;
+    photoActionSheet.configuration.allowSelectGif = YES;
+    photoActionSheet.configuration.allowSelectOriginal = YES;
+    photoActionSheet.configuration.languageType = ZLLanguageChineseSimplified;
+    photoActionSheet.configuration.allowRecordVideo = NO;
     return photoActionSheet;
 }
 
