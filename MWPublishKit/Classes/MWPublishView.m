@@ -62,7 +62,7 @@
 }
 
 #pragma mark - Keyboard
--(void)keyboardHide:(UITapGestureRecognizer*)tap{
+- (void)keyboardHide:(UITapGestureRecognizer*)tap {
     [self.inputTextView resignFirstResponder];
 }
 
