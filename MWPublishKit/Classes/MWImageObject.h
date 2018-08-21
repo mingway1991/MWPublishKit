@@ -10,10 +10,10 @@
 typedef enum : NSUInteger {
     MWImageObjectTypeUnknow,
     MWImageObjectTypeImage,
-    MWImageObjectTypeUrl
+    MWImageObjectTypeUrl,
 } MWImageObjectType;
 
-@interface MWImageObject : NSObject
+@interface MWImageObject : NSObject <NSCoding>
 
 /* 图片对象类型 */
 @property (nonatomic, assign) MWImageObjectType type;
