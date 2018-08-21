@@ -11,19 +11,20 @@
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
-		6003F598195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F596195388D20070C39A /* InfoPlist.strings */; };
-		6003F59A195388D20070C39A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F599195388D20070C39A /* main.m */; };
-		6003F59E195388D20070C39A /* MWAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* MWAppDelegate.m */; };
-		6003F5A7195388D20070C39A /* MWViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* MWViewController.m */; };
-		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
-		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
-		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
-		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
-		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
-		B0614AA972A20A508490B2D5 /* Pods_MWPublishKit_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AC389192F3E2BB67FDB97FC /* Pods_MWPublishKit_Tests.framework */; };
+		7A273ECB212BE703002D253C /* MWPublishKit.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 7A273EC8212BE703002D253C /* MWPublishKit.podspec */; };
+		7A273ECC212BE703002D253C /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 7A273EC9212BE703002D253C /* LICENSE */; };
+		7A273ECD212BE703002D253C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7A273ECA212BE703002D253C /* README.md */; };
+		7A273ED2212BE720002D253C /* MWAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A273ECF212BE720002D253C /* MWAppDelegate.m */; };
+		7A273ED3212BE720002D253C /* MWViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A273ED1212BE720002D253C /* MWViewController.m */; };
+		7A273ED7212BE733002D253C /* MWPublishKit-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A273ED4212BE732002D253C /* MWPublishKit-Info.plist */; };
+		7A273ED8212BE733002D253C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A273ED6212BE733002D253C /* main.m */; };
+		7A273EDC212BE974002D253C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A273EDA212BE974002D253C /* InfoPlist.strings */; };
+		7A273EE1212BE9B6002D253C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A273EDD212BE9B5002D253C /* LaunchScreen.storyboard */; };
+		7A273EE2212BE9B6002D253C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A273EDF212BE9B6002D253C /* Main.storyboard */; };
+		7A273EE4212BE9CD002D253C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A273EE3212BE9CD002D253C /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,36 +38,30 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		18C52270BBE60623C219D05E /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		233EEE8E9CA2B420415694A8 /* Pods_MWPublishKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MWPublishKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		32DC2B266D27ECD078F8A48A /* Pods-MWPublishKit_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MWPublishKit_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MWPublishKit_Tests/Pods-MWPublishKit_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* MWPublishKit_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MWPublishKit_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		6003F595195388D20070C39A /* MWPublishKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MWPublishKit-Info.plist"; sourceTree = "<group>"; };
-		6003F597195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F599195388D20070C39A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		6003F59B195388D20070C39A /* MWPublishKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MWPublishKit-Prefix.pch"; sourceTree = "<group>"; };
-		6003F59C195388D20070C39A /* MWAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWAppDelegate.h; sourceTree = "<group>"; };
-		6003F59D195388D20070C39A /* MWAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MWAppDelegate.m; sourceTree = "<group>"; };
-		6003F5A5195388D20070C39A /* MWViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWViewController.h; sourceTree = "<group>"; };
-		6003F5A6195388D20070C39A /* MWViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MWViewController.m; sourceTree = "<group>"; };
-		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6003F5AE195388D20070C39A /* MWPublishKit_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MWPublishKit_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
-		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
-		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
-		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		7750F9F9119D944191BD80F5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		7A273EC8212BE703002D253C /* MWPublishKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWPublishKit.podspec; sourceTree = "<group>"; };
+		7A273EC9212BE703002D253C /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		7A273ECA212BE703002D253C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		7A273ECE212BE720002D253C /* MWAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWAppDelegate.h; path = MWPublishKitDemo/MWAppDelegate.h; sourceTree = SOURCE_ROOT; };
+		7A273ECF212BE720002D253C /* MWAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWAppDelegate.m; path = MWPublishKitDemo/MWAppDelegate.m; sourceTree = SOURCE_ROOT; };
+		7A273ED0212BE720002D253C /* MWViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWViewController.h; path = MWPublishKitDemo/MWViewController.h; sourceTree = SOURCE_ROOT; };
+		7A273ED1212BE720002D253C /* MWViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWViewController.m; path = MWPublishKitDemo/MWViewController.m; sourceTree = SOURCE_ROOT; };
+		7A273ED4212BE732002D253C /* MWPublishKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "MWPublishKit-Info.plist"; path = "MWPublishKitDemo/MWPublishKit-Info.plist"; sourceTree = SOURCE_ROOT; };
+		7A273ED5212BE733002D253C /* MWPublishKit-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MWPublishKit-Prefix.pch"; path = "MWPublishKitDemo/MWPublishKit-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		7A273ED6212BE733002D253C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MWPublishKitDemo/main.m; sourceTree = SOURCE_ROOT; };
+		7A273EDB212BE974002D253C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = MWPublishKitDemo/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
+		7A273EDE212BE9B5002D253C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = MWPublishKitDemo/Base.lproj/LaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
+		7A273EE0212BE9B6002D253C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = MWPublishKitDemo/Base.lproj/Main.storyboard; sourceTree = SOURCE_ROOT; };
+		7A273EE3212BE9CD002D253C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MWPublishKitDemo/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		7AC389192F3E2BB67FDB97FC /* Pods_MWPublishKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MWPublishKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		ACF0E1A532858242C77CE823 /* Pods-MWPublishKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MWPublishKit_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MWPublishKit_Tests/Pods-MWPublishKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		CE8B0E5AE35D4CDB365B3AC0 /* Pods-MWPublishKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MWPublishKit_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MWPublishKit_Example/Pods-MWPublishKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		DA38787A9600C936836DB8E7 /* Pods-MWPublishKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MWPublishKit_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-MWPublishKit_Example/Pods-MWPublishKit_Example.release.xcconfig"; sourceTree = "<group>"; };
-		FAD524C7BBD31605FCA8139A /* MWPublishKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = MWPublishKit.podspec; path = ../MWPublishKit.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,7 +83,6 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				B0614AA972A20A508490B2D5 /* Pods_MWPublishKit_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,7 +94,6 @@
 			children = (
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				6003F593195388D20070C39A /* Example for MWPublishKit */,
-				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
 				9600C503D8C2EDE9706373F4 /* Pods */,
@@ -132,13 +125,13 @@
 		6003F593195388D20070C39A /* Example for MWPublishKit */ = {
 			isa = PBXGroup;
 			children = (
-				6003F59C195388D20070C39A /* MWAppDelegate.h */,
-				6003F59D195388D20070C39A /* MWAppDelegate.m */,
-				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
-				6003F5A5195388D20070C39A /* MWViewController.h */,
-				6003F5A6195388D20070C39A /* MWViewController.m */,
-				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
-				6003F5A8195388D20070C39A /* Images.xcassets */,
+				7A273EE3212BE9CD002D253C /* Images.xcassets */,
+				7A273EDD212BE9B5002D253C /* LaunchScreen.storyboard */,
+				7A273EDF212BE9B6002D253C /* Main.storyboard */,
+				7A273ECE212BE720002D253C /* MWAppDelegate.h */,
+				7A273ECF212BE720002D253C /* MWAppDelegate.m */,
+				7A273ED0212BE720002D253C /* MWViewController.h */,
+				7A273ED1212BE720002D253C /* MWViewController.m */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
 			name = "Example for MWPublishKit";
@@ -148,29 +141,10 @@
 		6003F594195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				6003F595195388D20070C39A /* MWPublishKit-Info.plist */,
-				6003F596195388D20070C39A /* InfoPlist.strings */,
-				6003F599195388D20070C39A /* main.m */,
-				6003F59B195388D20070C39A /* MWPublishKit-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		6003F5B5195388D20070C39A /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				6003F5BB195388D20070C39A /* Tests.m */,
-				6003F5B6195388D20070C39A /* Supporting Files */,
-			);
-			path = Tests;
-			sourceTree = "<group>";
-		};
-		6003F5B6195388D20070C39A /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				6003F5B7195388D20070C39A /* Tests-Info.plist */,
-				6003F5B8195388D20070C39A /* InfoPlist.strings */,
-				606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */,
+				7A273ED6212BE733002D253C /* main.m */,
+				7A273ED4212BE732002D253C /* MWPublishKit-Info.plist */,
+				7A273ED5212BE733002D253C /* MWPublishKit-Prefix.pch */,
+				7A273EDA212BE974002D253C /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -178,9 +152,9 @@
 		60FF7A9C1954A5C5007DD14C /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				FAD524C7BBD31605FCA8139A /* MWPublishKit.podspec */,
-				18C52270BBE60623C219D05E /* README.md */,
-				7750F9F9119D944191BD80F5 /* LICENSE */,
+				7A273EC9212BE703002D253C /* LICENSE */,
+				7A273EC8212BE703002D253C /* MWPublishKit.podspec */,
+				7A273ECA212BE703002D253C /* README.md */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
@@ -190,8 +164,6 @@
 			children = (
 				CE8B0E5AE35D4CDB365B3AC0 /* Pods-MWPublishKit_Example.debug.xcconfig */,
 				DA38787A9600C936836DB8E7 /* Pods-MWPublishKit_Example.release.xcconfig */,
-				32DC2B266D27ECD078F8A48A /* Pods-MWPublishKit_Tests.debug.xcconfig */,
-				ACF0E1A532858242C77CE823 /* Pods-MWPublishKit_Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -223,12 +195,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "MWPublishKit_Tests" */;
 			buildPhases = (
-				7C77BA3C88B70A5F736BBE37 /* [CP] Check Pods Manifest.lock */,
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				5120275FAABF8701636561F4 /* [CP] Embed Pods Frameworks */,
-				11F15F56CB96C31976698A19 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -279,10 +248,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
-				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
-				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
-				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
+				7A273EE2212BE9B6002D253C /* Main.storyboard in Resources */,
+				7A273EE4212BE9CD002D253C /* Images.xcassets in Resources */,
+				7A273ECC212BE703002D253C /* LICENSE in Resources */,
+				7A273ED7212BE733002D253C /* MWPublishKit-Info.plist in Resources */,
+				7A273ECD212BE703002D253C /* README.md in Resources */,
+				7A273EE1212BE9B6002D253C /* LaunchScreen.storyboard in Resources */,
+				7A273ECB212BE703002D253C /* MWPublishKit.podspec in Resources */,
+				7A273EDC212BE974002D253C /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,7 +263,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,54 +291,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MWPublishKit_Example/Pods-MWPublishKit_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		11F15F56CB96C31976698A19 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MWPublishKit_Tests/Pods-MWPublishKit_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5120275FAABF8701636561F4 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MWPublishKit_Tests/Pods-MWPublishKit_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7C77BA3C88B70A5F736BBE37 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MWPublishKit_Tests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		91AFEA95C2DA65CA763F8B39 /* [CP] Check Pods Manifest.lock */ = {
@@ -409,9 +333,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F59E195388D20070C39A /* MWAppDelegate.m in Sources */,
-				6003F5A7195388D20070C39A /* MWViewController.m in Sources */,
-				6003F59A195388D20070C39A /* main.m in Sources */,
+				7A273ED2212BE720002D253C /* MWAppDelegate.m in Sources */,
+				7A273ED8212BE733002D253C /* main.m in Sources */,
+				7A273ED3212BE720002D253C /* MWViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,7 +343,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F5BC195388D20070C39A /* Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,28 +357,28 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		6003F596195388D20070C39A /* InfoPlist.strings */ = {
+		7A273EDA212BE974002D253C /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6003F597195388D20070C39A /* en */,
+				7A273EDB212BE974002D253C /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		6003F5B8195388D20070C39A /* InfoPlist.strings */ = {
+		7A273EDD212BE9B5002D253C /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6003F5B9195388D20070C39A /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				71719F9E1E33DC2100824A3D /* Base */,
+				7A273EDE212BE9B5002D253C /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		7A273EDF212BE9B6002D253C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A273EE0212BE9B6002D253C /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -540,8 +463,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MWPublishKit/MWPublishKit-Prefix.pch";
-				INFOPLIST_FILE = "MWPublishKit/MWPublishKit-Info.plist";
+				GCC_PREFIX_HEADER = "MWPublishKitDemo/MWPublishKit-Prefix.pch";
+				INFOPLIST_FILE = "MWPublishKitDemo/MWPublishKit-Info.plist";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -555,8 +478,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MWPublishKit/MWPublishKit-Prefix.pch";
-				INFOPLIST_FILE = "MWPublishKit/MWPublishKit-Info.plist";
+				GCC_PREFIX_HEADER = "MWPublishKitDemo/MWPublishKit-Prefix.pch";
+				INFOPLIST_FILE = "MWPublishKitDemo/MWPublishKit-Info.plist";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -566,7 +489,6 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 32DC2B266D27ECD078F8A48A /* Pods-MWPublishKit_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -590,7 +512,6 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ACF0E1A532858242C77CE823 /* Pods-MWPublishKit_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
