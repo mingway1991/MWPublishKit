@@ -8,5 +8,8 @@
 #ifndef MWPublishKit_h
 #define MWPublishKit_h
 
+#import "MWImageObject.h"
+#import "MWMoreItem.h"
+#import "MWPublishView.h"
 
 #endif /* MWPublishKit_h */

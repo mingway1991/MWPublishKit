@@ -1,0 +1,28 @@
+PODS:
+  - GPUImage (0.1.7)
+  - MWPublishKit (1.0.0):
+    - SDWebImage (>= 4.4.2)
+    - ZLPhotoBrowser (>= 2.7.4)
+  - SDWebImage (4.4.2):
+    - SDWebImage/Core (= 4.4.2)
+  - SDWebImage/Core (4.4.2)
+  - ZLPhotoBrowser (2.7.4):
+    - GPUImage
+    - SDWebImage
+
+DEPENDENCIES:
+  - MWPublishKit (from `../`)
+
+EXTERNAL SOURCES:
+  MWPublishKit:
+    :path: ../
+
+SPEC CHECKSUMS:
+  GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
+  MWPublishKit: b200056db8a77f82ceabad3d6bfd2477ede1e497
+  SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
+  ZLPhotoBrowser: b666fe8f68edc63dc5c4edccca071885b87553f5
+
+PODFILE CHECKSUM: cadf4bd9e30edb79c0d3b2ce7c7b2aa9892e612f
+
+COCOAPODS: 1.3.1

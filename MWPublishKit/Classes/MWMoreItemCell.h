@@ -6,7 +6,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class MWMoreItem;
 
 @interface MWMoreItemCell : UITableViewCell
+
+- (void)updateUIWithMoreItem:(MWMoreItem *)moreItem;
 
 @end
