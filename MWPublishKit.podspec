@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'MWPublishKit'
-  s.version          = '0.5.1'
+  s.version          = '0.5.2'
   s.summary          = '发表文字图片'
 
   s.description      = <<-DESC
@@ -17,6 +17,6 @@ TODO: Add long description of the pod here.
 
   s.source_files = 'MWPublishKit/Classes/**/*'
   s.resources = 'MWPublishKit/Assets/**/*'
-  s.dependency 'ZLPhotoBrowser', '~> 2.7.4'
-  s.dependency 'SDWebImage', '~> 4.4.2'
+  s.dependency 'ZLPhotoBrowser'
+  s.dependency 'SDWebImage'
 end
