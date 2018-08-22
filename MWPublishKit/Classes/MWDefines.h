@@ -23,7 +23,7 @@
 /* 图片之间距离 */
 #define DISTANCE_BETWEEN_IMAGES 5.f
 /* 输入文本区域与图片选择区域距离 */
-#define DISTANCE_BETWEEN_TEXTVIEW_AND_IMAGE 30.f
+#define DISTANCE_BETWEEN_TEXTVIEW_AND_IMAGE 20.f
 /* 图片选择区域与更多条目距离 */
 #define DISTANCE_BETWEEN_IMAGE_AND_MOREITEMS 50.f
 
