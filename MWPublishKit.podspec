@@ -17,6 +17,6 @@ TODO: Add long description of the pod here.
 
   s.source_files = 'MWPublishKit/Classes/**/*'
   s.resources = 'MWPublishKit/Assets/**/*'
-  s.dependency 'ZLPhotoBrowser', '>=2.7.4'
-  s.dependency 'SDWebImage', '>=4.4.2'
+  s.dependency 'ZLPhotoBrowser', '~> 2.7.4'
+  s.dependency 'SDWebImage', '~> 4.4.2'
 end
