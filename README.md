@@ -20,9 +20,13 @@ it, simply add the following line to your Podfile:
 pod 'MWPublishKit'
 ```
 
+## 效果图
+
+![效果图](https://raw.githubusercontent.com/mingway1991/MWPublishKit/master/%E6%95%88%E6%9E%9C%E5%9B%BE/1.jpg "preview")
+
 ## Author
 
-mingway1991, shimingwei@lvmama.com
+mingway1991, mingwei.shi@hotmail.com
 
 ## License
 
