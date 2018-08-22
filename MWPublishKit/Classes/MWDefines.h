@@ -12,5 +12,7 @@
 #define INPUT_VIEW_HEIGHT 150.f
 #define MORE_ITEM_CELL_HEIGHT 44.f
 #define BOTTOM_PADDING 30.f
+#define IMAGE_MAX_COUNT 9
+#define IMAGE_TIPS_HEIGHT 25.f
 
 #endif /* MWDefines_h */

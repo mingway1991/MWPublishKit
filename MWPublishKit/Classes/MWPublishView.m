@@ -14,6 +14,7 @@
 #import "MWMoreItemCell.h"
 #import "MWMoreItem.h"
 #import "MWDefines.h"
+#import "MWImageHelper.h"
 
 @interface MWPublishView() <UICollectionViewDataSource,
                             UICollectionViewDelegateFlowLayout,
@@ -89,6 +90,7 @@
     return self.inputTextView.text;
 }
 
+/* 刷新更多条目 */
 - (void)reloadMoreItems {
     [self updateMoreItems];
 }
@@ -119,10 +121,10 @@
 /* 计算图片item个数（包含加号） */
 - (NSInteger)calImageCollectionViewItemCount {
     NSInteger itemCount = 0;
-    if (_selectImages.count < 9) {
+    if (_selectImages.count < IMAGE_MAX_COUNT) {
         itemCount = _selectImages.count+1;
     } else {
-        itemCount = 9;
+        itemCount = IMAGE_MAX_COUNT;
     }
     return itemCount;
 }
@@ -136,13 +138,13 @@
     } else {
         lineNum = itemCount/3+1;
     }
-    return lineNum*(_imageItemWidth+10.f);
+    return lineNum*(_imageItemWidth+10.f)+IMAGE_TIPS_HEIGHT;
 }
 
 /* 跳转选择图片ActionSheet  */
 - (void)selectImage {
     ZLPhotoActionSheet *photoActionSheet = [self photoActionSheet];
-    photoActionSheet.configuration.maxSelectCount = 9-_selectImages.count;
+    photoActionSheet.configuration.maxSelectCount = IMAGE_MAX_COUNT-_selectImages.count;
     //选择回调
     __weak typeof(_selectImages) weakSelectImages =_selectImages;
     __weak typeof(self) weakSelf = self;
@@ -170,7 +172,7 @@
 
 /* 更新scrollView contentsize */
 - (void)updateScrollViewContentSize {
-    self.bgScrollView.contentSize = CGSizeMake(CGRectGetWidth(self.bgScrollView.bounds), CGRectGetMaxY(self.inputTextView.frame)+[self calImageCollectionViewHeight]+[self.moreItemDataSource moreItemCount]*MORE_ITEM_CELL_HEIGHT+BOTTOM_PADDING);
+    self.bgScrollView.contentSize = CGSizeMake(CGRectGetWidth(self.bgScrollView.bounds), CGRectGetMaxY(self.inputTextView.frame)+20.f+[self calImageCollectionViewHeight]+[self.moreItemDataSource moreItemCount]*MORE_ITEM_CELL_HEIGHT+BOTTOM_PADDING);
 }
 
 /* 更改选择图片数量 */
@@ -258,6 +260,29 @@
     return cell;
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    UICollectionReusableView *tipsHeader = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"tipsHeader" forIndexPath:indexPath];
+    UILabel *tipsLabel = [tipsHeader viewWithTag:1000];
+    if (!tipsLabel) {
+        CGFloat itemHeight = 16.f;
+        
+        UIImageView *tipsImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, 0.f, itemHeight, itemHeight)];
+        tipsImageView.image = [MWImageHelper loadImageWithName:@"tips"];
+        [tipsHeader addSubview:tipsImageView];
+        
+        CGRect frame = tipsHeader.bounds;
+        frame.origin.x = CGRectGetMaxX(tipsImageView.frame) + 5.f;
+        frame.size.height = itemHeight;
+        tipsLabel = [[UILabel alloc] initWithFrame:frame];
+        tipsLabel.textColor = [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:1];
+        tipsLabel.font = [UIFont systemFontOfSize:12.f];
+        tipsLabel.text = @"长按并拖拽图片可改变顺序";
+        tipsLabel.tag = 1000;
+        [tipsHeader addSubview:tipsLabel];
+    }
+    return tipsHeader;
+}
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.item == _selectImages.count) {
         //进入选择图片
@@ -294,6 +319,10 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(_imageItemWidth, _imageItemWidth);
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    return CGSizeMake(CGRectGetWidth(collectionView.frame), IMAGE_TIPS_HEIGHT);
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -398,13 +427,14 @@
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.minimumLineSpacing = 5.f;
         layout.minimumInteritemSpacing = 5.f;
-        self.imageCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(PADDING, CGRectGetMaxY(self.inputTextView.frame)+10.f, CGRectGetWidth(self.inputTextView.frame), [self calImageCollectionViewHeight]) collectionViewLayout:layout];
+        self.imageCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(PADDING, CGRectGetMaxY(self.inputTextView.frame)+20.f, CGRectGetWidth(self.inputTextView.frame), [self calImageCollectionViewHeight]) collectionViewLayout:layout];
         _imageCollectionView.backgroundColor = [UIColor whiteColor];
         _imageCollectionView.delegate = self;
         _imageCollectionView.dataSource = self;
         _imageCollectionView.clipsToBounds = NO;
         _imageCollectionView.bounces = NO;
         [_imageCollectionView registerClass:[MWImageCell class] forCellWithReuseIdentifier:@"imageCell"];
+        [_imageCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"tipsHeader"];
         UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
         [_imageCollectionView addGestureRecognizer:longPressGesture];
     }

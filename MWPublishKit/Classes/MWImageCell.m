@@ -8,6 +8,7 @@
 #import "MWImageCell.h"
 #import "UIImageView+WebCache.h"
 #import "MWImageObject.h"
+#import "MWImageHelper.h"
 
 @interface MWImageCell()
 
@@ -59,9 +60,7 @@
 - (UIImageView *)addImageView {
     if (!_addImageView) {
         self.addImageView = [[UIImageView alloc] initWithFrame:self.bounds];
-        NSBundle *bundle = [NSBundle bundleForClass:self.class];
-        UIImage *image = [UIImage imageNamed:@"add" inBundle:bundle compatibleWithTraitCollection:nil];
-        _addImageView.image = image;
+        _addImageView.image = [MWImageHelper loadImageWithName:@"add"];
     }
     return _addImageView;
 }

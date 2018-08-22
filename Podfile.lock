@@ -1,6 +1,6 @@
 PODS:
   - GPUImage (0.1.7)
-  - MWPublishKit (0.1.0):
+  - MWPublishKit (0.3.0):
     - SDWebImage (>= 4.4.2)
     - ZLPhotoBrowser (>= 2.7.4)
   - SDWebImage (4.4.2):
@@ -19,7 +19,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
-  MWPublishKit: 9a43438ade32a989e78959ba97e46e5e49d53674
+  MWPublishKit: d200497bfd3661cfc95ded605d2d338f18cd36e7
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   ZLPhotoBrowser: b666fe8f68edc63dc5c4edccca071885b87553f5
 
