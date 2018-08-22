@@ -11,7 +11,7 @@
 /* 左右间距 */
 #define PADDING 20.f
 /* 输入文本区域高度 */
-#define INPUT_VIEW_HEIGHT 150.f
+#define INPUT_VIEW_HEIGHT 100.f
 /* 更多条目高度 */
 #define MORE_ITEM_CELL_HEIGHT 60.f
 /* 距离底部距离 */
