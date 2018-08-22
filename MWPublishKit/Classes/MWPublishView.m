@@ -138,7 +138,7 @@
     } else {
         lineNum = itemCount/3+1;
     }
-    return lineNum*(_imageItemWidth+10.f)+IMAGE_TIPS_HEIGHT;
+    return lineNum*_imageItemWidth+(lineNum-1)*DISTANCE_BETWEEN_IMAGES+IMAGE_TIPS_HEIGHT;
 }
 
 /* 跳转选择图片ActionSheet  */
@@ -172,7 +172,7 @@
 
 /* 更新scrollView contentsize */
 - (void)updateScrollViewContentSize {
-    self.bgScrollView.contentSize = CGSizeMake(CGRectGetWidth(self.bgScrollView.bounds), CGRectGetMaxY(self.inputTextView.frame)+20.f+[self calImageCollectionViewHeight]+[self.moreItemDataSource moreItemCount]*MORE_ITEM_CELL_HEIGHT+BOTTOM_PADDING);
+    self.bgScrollView.contentSize = CGSizeMake(CGRectGetWidth(self.bgScrollView.bounds), CGRectGetMaxY(self.inputTextView.frame)+DISTANCE_BETWEEN_TEXTVIEW_AND_IMAGE+[self calImageCollectionViewHeight]+DISTANCE_BETWEEN_IMAGE_AND_MOREITEMS+[self.moreItemDataSource moreItemCount]*MORE_ITEM_CELL_HEIGHT+BOTTOM_PADDING);
 }
 
 /* 更改选择图片数量 */
@@ -187,7 +187,7 @@
 /* 更改更多选项 */
 - (void)updateMoreItems {
     CGRect moreFrame = self.moreTableView.frame;
-    moreFrame.origin.y = CGRectGetMaxY(self.imageCollectionView.frame);
+    moreFrame.origin.y = CGRectGetMaxY(self.imageCollectionView.frame)+DISTANCE_BETWEEN_IMAGE_AND_MOREITEMS;
     moreFrame.size.height = [self.moreItemDataSource moreItemCount]*MORE_ITEM_CELL_HEIGHT;
     self.moreTableView.frame = moreFrame;
     [self.moreTableView reloadData];
@@ -374,7 +374,7 @@
     if (!cell) {
         cell = [[MWMoreItemCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"moreCell"];
     }
-    [cell updateUIWithMoreItem:[self.moreItemDataSource moreItemForRow:indexPath.row]];
+    [cell updateUIWithMoreItem:[self.moreItemDataSource moreItemForRow:indexPath.row] isFirst:indexPath.row == 0 ? YES : NO];
     return cell;
 }
 
@@ -390,7 +390,7 @@
     if (!_bgScrollView) {
         self.bgScrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
         [_bgScrollView addSubview:self.inputTextView];
-        _imageItemWidth = ((CGRectGetWidth(_bgScrollView.bounds)-2*PADDING)-10.f)/3.f;
+        _imageItemWidth = (CGRectGetWidth(_bgScrollView.bounds)-2*PADDING-2*DISTANCE_BETWEEN_IMAGES)/3.f;
         [_bgScrollView addSubview:self.imageCollectionView];
         [_bgScrollView addSubview:self.moreTableView];
     }
@@ -425,9 +425,9 @@
 - (UICollectionView *)imageCollectionView {
     if (!_imageCollectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.minimumLineSpacing = 5.f;
-        layout.minimumInteritemSpacing = 5.f;
-        self.imageCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(PADDING, CGRectGetMaxY(self.inputTextView.frame)+20.f, CGRectGetWidth(self.inputTextView.frame), [self calImageCollectionViewHeight]) collectionViewLayout:layout];
+        layout.minimumLineSpacing = DISTANCE_BETWEEN_IMAGES;
+        layout.minimumInteritemSpacing = DISTANCE_BETWEEN_IMAGES;
+        self.imageCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(PADDING, CGRectGetMaxY(self.inputTextView.frame)+DISTANCE_BETWEEN_TEXTVIEW_AND_IMAGE, CGRectGetWidth(self.inputTextView.frame), [self calImageCollectionViewHeight]) collectionViewLayout:layout];
         _imageCollectionView.backgroundColor = [UIColor whiteColor];
         _imageCollectionView.delegate = self;
         _imageCollectionView.dataSource = self;
@@ -443,7 +443,7 @@
 
 - (UITableView *)moreTableView {
     if (!_moreTableView) {
-        self.moreTableView = [[UITableView alloc] initWithFrame:CGRectMake(PADDING, CGRectGetMaxY(self.imageCollectionView.frame), CGRectGetWidth(self.imageCollectionView.frame), 0) style:UITableViewStylePlain];
+        self.moreTableView = [[UITableView alloc] initWithFrame:CGRectMake(PADDING, CGRectGetMaxY(self.imageCollectionView.frame)+DISTANCE_BETWEEN_IMAGE_AND_MOREITEMS, CGRectGetWidth(self.imageCollectionView.frame), 0) style:UITableViewStylePlain];
         _moreTableView.delegate = self;
         _moreTableView.dataSource = self;
         _moreTableView.bounces = NO;

@@ -10,6 +10,6 @@
 
 @interface MWMoreItemCell : UITableViewCell
 
-- (void)updateUIWithMoreItem:(MWMoreItem *)moreItem;
+- (void)updateUIWithMoreItem:(MWMoreItem *)moreItem isFirst:(BOOL)isFirst;
 
 @end

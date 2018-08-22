@@ -33,20 +33,17 @@
 }
 
 - (NSInteger)moreItemCount {
-    return 1;
+    return 2;
 }
 
 - (MWMoreItem *)moreItemForRow:(NSInteger)row {
-    if (row == 0) {
-        MWMoreItem *moreItem = [[MWMoreItem alloc] init];
-        moreItem.normalTitle = @"开启定位";
-        moreItem.selectedTitle = @"xxxx市";
-        moreItem.isSelected = NO;
-        moreItem.normalIconImage = [UIImage imageNamed:@"location"];
-        moreItem.selectedIconImage = [UIImage imageNamed:@"selected_location"];
-        return moreItem;
-    }
-    return nil;
+    MWMoreItem *moreItem = [[MWMoreItem alloc] init];
+    moreItem.normalTitle = @"开启定位";
+    moreItem.selectedTitle = @"xxxx市";
+    moreItem.isSelected = NO;
+    moreItem.normalIconImage = [UIImage imageNamed:@"location"];
+    moreItem.selectedIconImage = [UIImage imageNamed:@"selected_location"];
+    return moreItem;
 }
 
 - (void)clickItemForMoreItem:(MWMoreItem *)moreItem row:(NSInteger)row {
