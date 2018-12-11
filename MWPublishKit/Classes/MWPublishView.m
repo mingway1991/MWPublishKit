@@ -6,6 +6,7 @@
 //
 
 #import "MWPublishView.h"
+#import "MWInputTextCell.h"
 #import "MWImageCell.h"
 #import "ZLPhotoActionSheet.h"
 #import "ZLShowBigImgViewController.h"
@@ -18,19 +19,19 @@
 
 @interface MWPublishView() <UICollectionViewDataSource,
                             UICollectionViewDelegateFlowLayout,
-                            UICollectionViewDelegate,
-                            UITextViewDelegate,
-                            UITableViewDataSource,
-                            UITableViewDelegate>
-{
+                            UICollectionViewDelegate> {
     NSMutableArray<MWImageObject *> *_selectImages;     //保存选择图片对象的数组
     CGFloat _imageItemWidth;                            //图片条目的宽度
+    CGPoint _beginDragPoint;
+                                
+    NSString *_placeHolder;
+    UIFont *_textFont;
+    UIColor *_textColor;
 }
-@property (nonatomic, strong) UIScrollView *bgScrollView;
-@property (nonatomic, strong) UILabel *placeHolderLabel;
-@property (nonatomic, strong) UITextView *inputTextView;
-@property (nonatomic, strong) UICollectionView *imageCollectionView;
-@property (nonatomic, strong) UITableView *moreTableView;
+
+@property (nonatomic, strong) MWInputTextCell *inputTextCell;
+@property (nonatomic, strong) UICollectionView *contentCollectionView;
+@property (nonatomic, strong) UIButton *removeAreaButton;   //图片移除区域
 
 @end
 
@@ -54,9 +55,18 @@
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.contentCollectionView.frame = CGRectMake(0.f, 0.f, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    self.removeAreaButton.frame = CGRectMake(0.f, CGRectGetHeight(self.bounds)-REMOVE_AREA_HEIGHT, CGRectGetWidth(self.bounds), REMOVE_AREA_HEIGHT);
+}
+
 - (void)setup {
+    _imageItemWidth = ([UIScreen mainScreen].bounds.size.width-2*MARGIN-2*DISTANCE_BETWEEN_IMAGES)/3.f;
     _selectImages = [NSMutableArray array];
-    [self addSubview:self.bgScrollView];
+    [self addSubview:self.contentCollectionView];
+    [self addSubview:self.removeAreaButton];
+    
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
     tapGestureRecognizer.cancelsTouchesInView = NO;
     [self addGestureRecognizer:tapGestureRecognizer];
@@ -64,7 +74,7 @@
 
 #pragma mark - Keyboard
 - (void)keyboardHide:(UITapGestureRecognizer*)tap {
-    [self.inputTextView resignFirstResponder];
+    [self.inputTextCell resignTextViewFisrtResponder];
 }
 
 #pragma mark - Public Methods
@@ -76,8 +86,7 @@
 
 /* 设置默认文本 */
 - (void)configInputText:(NSString *)inputText {
-    self.inputTextView.text = inputText;
-    [self updatePlaceHolderStateWithText:inputText];
+    [self.inputTextCell setText:inputText];
 }
 
 /* 获取选中的图片对象 */
@@ -87,34 +96,31 @@
 
 /* 获取输入文字 */
 - (NSString *)inputText {
-    return self.inputTextView.text;
+    return self.inputTextCell.text;
 }
 
 /* 刷新更多条目 */
 - (void)reloadMoreItems {
-    [self updateMoreItems];
+    [self.contentCollectionView reloadData];
 }
 
 #pragma mark - Setter
 /* 设置placeHolder文本 */
 - (void)setPlaceHolder:(NSString *)placeHolder {
     _placeHolder = placeHolder;
-    self.placeHolderLabel.text = placeHolder;
-    self.placeHolderLabel.frame = self.inputTextView.bounds;
-    [self.placeHolderLabel sizeToFit];
+    [self.inputTextCell setPlaceHolder:placeHolder];
 }
 
 /* 设置文本字体 */
 - (void)setTextFont:(UIFont *)textFont {
-    self.placeHolderLabel.font = textFont;
-    self.inputTextView.font = textFont;
-    self.placeHolderLabel.frame = self.inputTextView.bounds;
-    [self.placeHolderLabel sizeToFit];
+    _textFont = textFont;
+    [self.inputTextCell setFont:textFont];
 }
 
 /* 设置文本颜色 */
 - (void)setTextColor:(UIColor *)textColor {
-    self.inputTextView.textColor = textColor;
+    _textColor = textColor;
+    [self.inputTextCell setTextColor:textColor];
 }
 
 #pragma mark - Helper
@@ -127,18 +133,6 @@
         itemCount = IMAGE_MAX_COUNT;
     }
     return itemCount;
-}
-
-/* 计算image collection view高度 */
-- (CGFloat)calImageCollectionViewHeight {
-    NSInteger itemCount = [self calImageCollectionViewItemCount];
-    NSInteger lineNum = 0;
-    if (itemCount % 3 == 0) {
-        lineNum = itemCount/3;
-    } else {
-        lineNum = itemCount/3+1;
-    }
-    return lineNum*_imageItemWidth+(lineNum-1)*DISTANCE_BETWEEN_IMAGES+IMAGE_TIPS_HEIGHT;
 }
 
 /* 跳转选择图片ActionSheet  */
@@ -161,44 +155,16 @@
     [photoActionSheet showPreviewAnimated:YES];
 }
 
-/* 根据文本处理placeHolderLabel的显示与隐藏 */
-- (void)updatePlaceHolderStateWithText:(NSString *)text {
-    if (text.length == 0) {
-        self.placeHolderLabel.alpha = 1;
-    } else {
-        self.placeHolderLabel.alpha = 0;
-    }
-}
-
-/* 更新scrollView contentsize */
-- (void)updateScrollViewContentSize {
-    self.bgScrollView.contentSize = CGSizeMake(CGRectGetWidth(self.bgScrollView.bounds), CGRectGetMaxY(self.inputTextView.frame)+DISTANCE_BETWEEN_TEXTVIEW_AND_IMAGE+[self calImageCollectionViewHeight]+DISTANCE_BETWEEN_IMAGE_AND_MOREITEMS+[self.moreItemDataSource moreItemCount]*MORE_ITEM_CELL_HEIGHT+BOTTOM_PADDING);
-}
-
 /* 更改选择图片数量 */
 - (void)updateSelectImages {
-    CGRect imageFrame = self.imageCollectionView.frame;
-    imageFrame.size.height = [self calImageCollectionViewHeight];
-    self.imageCollectionView.frame = imageFrame;
-    [self.imageCollectionView reloadData];
-    [self updateMoreItems];
-}
-
-/* 更改更多选项 */
-- (void)updateMoreItems {
-    CGRect moreFrame = self.moreTableView.frame;
-    moreFrame.origin.y = CGRectGetMaxY(self.imageCollectionView.frame)+DISTANCE_BETWEEN_IMAGE_AND_MOREITEMS;
-    moreFrame.size.height = [self.moreItemDataSource moreItemCount]*MORE_ITEM_CELL_HEIGHT;
-    self.moreTableView.frame = moreFrame;
-    [self.moreTableView reloadData];
-    [self updateScrollViewContentSize];
+    [self.contentCollectionView reloadData];
 }
 
 #pragma mark - LongPress
 - (void)longPressAction:(UILongPressGestureRecognizer *)longPress {
     //获取此次点击的坐标，根据坐标获取cell对应的indexPath
-    CGPoint point = [longPress locationInView:self.imageCollectionView];
-    NSIndexPath *indexPath = [self.imageCollectionView indexPathForItemAtPoint:point];
+    CGPoint point = [longPress locationInView:self.contentCollectionView];
+    NSIndexPath *indexPath = [self.contentCollectionView indexPathForItemAtPoint:point];
     //根据长按手势的状态进行处理。
     switch (longPress.state) {
         case UIGestureRecognizerStateBegan:
@@ -208,7 +174,9 @@
             }
             //开始移动
             if (@available(iOS 9.0, *)) {
-                [self.imageCollectionView beginInteractiveMovementForItemAtIndexPath:indexPath];
+                _beginDragPoint = point;
+                self.removeAreaButton.hidden = NO;
+                [self.contentCollectionView beginInteractiveMovementForItemAtIndexPath:indexPath];
             } else {
                 // Fallback on earlier versions
             }
@@ -216,7 +184,7 @@
         case UIGestureRecognizerStateChanged:
             //移动过程中更新位置坐标
             if (@available(iOS 9.0, *)) {
-                [self.imageCollectionView updateInteractiveMovementTargetPosition:point];
+                [self.contentCollectionView updateInteractiveMovementTargetPosition:point];
             } else {
                 // Fallback on earlier versions
             }
@@ -224,7 +192,20 @@
         case UIGestureRecognizerStateEnded:
             //停止移动调用此方法
             if (@available(iOS 9.0, *)) {
-                [self.imageCollectionView endInteractiveMovement];
+                
+                //判断位置是否在删除区域
+                CGPoint location = [longPress locationInView:self];
+                if (CGRectContainsPoint(self.removeAreaButton.frame, location)) {
+                    NSLog(@"删除");
+                    NSIndexPath *indexPath = [self.contentCollectionView indexPathForItemAtPoint:_beginDragPoint];
+                    if (indexPath) {
+                        [_selectImages removeObjectAtIndex:indexPath.item];
+                        [self.contentCollectionView reloadData];
+                    }
+                }
+                
+                self.removeAreaButton.hidden = YES;
+                [self.contentCollectionView endInteractiveMovement];
             } else {
                 // Fallback on earlier versions
             }
@@ -232,7 +213,8 @@
         default:
             //取消移动
             if (@available(iOS 9.0, *)) {
-                [self.imageCollectionView cancelInteractiveMovement];
+                self.removeAreaButton.hidden = YES;
+                [self.contentCollectionView cancelInteractiveMovement];
             } else {
                 // Fallback on earlier versions
             }
@@ -242,91 +224,166 @@
 
 #pragma mark - UICollectionViewDelegate && UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    //section 0 文本区
+    //section 1 图片区
+    //section 2 更多功能区
+    return 3;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self calImageCollectionViewItemCount];
+    if (section == 0) {
+        return 1;
+    } else if (section == 1) {
+        return [self calImageCollectionViewItemCount];
+    } else if (section == 2) {
+        if (self.moreItemDataSource && [self.moreItemDataSource respondsToSelector:@selector(moreItemCount)]) {
+            return [self.moreItemDataSource moreItemCount];
+        }
+    }
+    return 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MWImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1];
-    if (indexPath.item == _selectImages.count) {
-        [cell updateUIWithAddImage];
-    } else {
-        [cell updateUIWithImageObject:_selectImages[indexPath.row]];
+    NSInteger section = indexPath.section;
+    NSInteger item = indexPath.item;
+    if (section == 0) {
+        if (!self.inputTextCell) {
+            self.inputTextCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"textCell" forIndexPath:indexPath];
+        }
+        [self.inputTextCell setTextColor:_textColor];
+        [self.inputTextCell setFont:_textFont];
+        [self.inputTextCell setPlaceHolder:_placeHolder];
+        return self.inputTextCell;
+    } else if (section == 1) {
+        MWImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
+        cell.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1];
+        if (indexPath.item == _selectImages.count) {
+            [cell updateUIWithAddImage];
+        } else {
+            [cell updateUIWithImageObject:_selectImages[item]];
+        }
+        return cell;
+    } else if (section == 2) {
+        MWMoreItemCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"moreItemCell" forIndexPath:indexPath];
+        [cell updateUIWithMoreItem:[self.moreItemDataSource moreItemForRow:indexPath.row] isFirst:indexPath.row == 0 ? YES : NO];
+        return cell;
     }
+    
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"blankCell" forIndexPath:indexPath];
     return cell;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    UICollectionReusableView *tipsHeader = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"tipsHeader" forIndexPath:indexPath];
-    UILabel *tipsLabel = [tipsHeader viewWithTag:1000];
-    if (!tipsLabel) {
-        CGFloat itemHeight = 16.f;
-        
-        UIImageView *tipsImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, 0.f, itemHeight, itemHeight)];
-        tipsImageView.image = [MWImageHelper loadImageWithName:@"tips"];
-        [tipsHeader addSubview:tipsImageView];
-        
-        CGRect frame = tipsHeader.bounds;
-        frame.origin.x = CGRectGetMaxX(tipsImageView.frame) + 5.f;
-        frame.size.height = itemHeight;
-        tipsLabel = [[UILabel alloc] initWithFrame:frame];
-        tipsLabel.textColor = [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:1];
-        tipsLabel.font = [UIFont systemFontOfSize:12.f];
-        tipsLabel.text = @"长按并拖拽图片可改变顺序";
-        tipsLabel.tag = 1000;
-        [tipsHeader addSubview:tipsLabel];
+    NSInteger section = indexPath.section;
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        if (section == 1) {
+            UICollectionReusableView *tipsHeader = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"tipsHeader" forIndexPath:indexPath];
+            UILabel *tipsLabel = [tipsHeader viewWithTag:1000];
+            if (!tipsLabel) {
+                CGFloat itemHeight = 16.f;
+                
+                UIImageView *tipsImageView = [[UIImageView alloc] initWithFrame:CGRectMake(MARGIN, 5.f, itemHeight, itemHeight)];
+                tipsImageView.image = [MWImageHelper loadImageWithName:@"tips"];
+                [tipsHeader addSubview:tipsImageView];
+                
+                CGRect frame = tipsHeader.bounds;
+                frame.origin.x = CGRectGetMaxX(tipsImageView.frame) + 5.f;
+                frame.origin.y = 5.f;
+                frame.size.height = itemHeight;
+                tipsLabel = [[UILabel alloc] initWithFrame:frame];
+                tipsLabel.textColor = [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:1];
+                tipsLabel.font = [UIFont systemFontOfSize:12.f];
+                tipsLabel.text = @"长按并拖拽图片可改变顺序";
+                tipsLabel.tag = 1000;
+                [tipsHeader addSubview:tipsLabel];
+            }
+            return tipsHeader;
+        }
+    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        if (section == 0 || section == 1) {
+            UICollectionReusableView *tipsFooter = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"tipsFooter" forIndexPath:indexPath];
+            return tipsFooter;
+        }
     }
-    return tipsHeader;
+    return nil;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.item == _selectImages.count) {
-        //进入选择图片
-        [self selectImage];
-    } else {
-        //预览图片
-        NSMutableArray *models = [NSMutableArray arrayWithCapacity:_selectImages.count];
-        for (MWImageObject *imgObject in _selectImages) {
-            if (imgObject.type == MWImageObjectTypeUrl) {
-                [models addObject:GetDictForPreviewPhoto(imgObject.contentObject, ZLPreviewPhotoTypeURLImage)];
-            } else if (imgObject.type == MWImageObjectTypeImage) {
-                [models addObject:GetDictForPreviewPhoto(imgObject.contentObject, ZLPreviewPhotoTypeUIImage)];
-            }
-        }
-        __weak typeof(_selectImages) weakSelectImages =_selectImages;
-        __weak typeof(self) weakSelf = self;
-        ZLPhotoActionSheet *photoActionSheet = [self photoActionSheet];
-        [photoActionSheet previewPhotos:models index:indexPath.row hideToolBar:NO complete:^(NSArray * _Nonnull photos) {
-            [weakSelectImages removeAllObjects];
-            for (NSDictionary *dict in photos) {
-                MWImageObject *imageObj = [[MWImageObject alloc] init];
-                imageObj.contentObject = dict[ZLPreviewPhotoObj];
-                if ([dict[ZLPreviewPhotoTyp] integerValue] == ZLPreviewPhotoTypeUIImage) {
-                    imageObj.type = MWImageObjectTypeImage;
-                } else if ([dict[ZLPreviewPhotoTyp] integerValue] == ZLPreviewPhotoTypeURLImage) {
-                    imageObj.type = MWImageObjectTypeUrl;
+    NSInteger section = indexPath.section;
+    NSInteger item = indexPath.item;
+    
+    if (section == 0) {
+        
+    } else if (section == 1) {
+        if (item == _selectImages.count) {
+            //进入选择图片
+            [self selectImage];
+        } else {
+            //预览图片
+            NSMutableArray *models = [NSMutableArray arrayWithCapacity:_selectImages.count];
+            for (MWImageObject *imgObject in _selectImages) {
+                if (imgObject.type == MWImageObjectTypeUrl) {
+                    [models addObject:GetDictForPreviewPhoto(imgObject.contentObject, ZLPreviewPhotoTypeURLImage)];
+                } else if (imgObject.type == MWImageObjectTypeImage) {
+                    [models addObject:GetDictForPreviewPhoto(imgObject.contentObject, ZLPreviewPhotoTypeUIImage)];
                 }
-                [weakSelectImages addObject:imageObj];
             }
-            [weakSelf updateSelectImages];
-        }];
+            __weak typeof(_selectImages) weakSelectImages =_selectImages;
+            __weak typeof(self) weakSelf = self;
+            ZLPhotoActionSheet *photoActionSheet = [self photoActionSheet];
+            [photoActionSheet previewPhotos:models index:indexPath.row hideToolBar:NO complete:^(NSArray * _Nonnull photos) {
+                [weakSelectImages removeAllObjects];
+                for (NSDictionary *dict in photos) {
+                    MWImageObject *imageObj = [[MWImageObject alloc] init];
+                    imageObj.contentObject = dict[ZLPreviewPhotoObj];
+                    if ([dict[ZLPreviewPhotoTyp] integerValue] == ZLPreviewPhotoTypeUIImage) {
+                        imageObj.type = MWImageObjectTypeImage;
+                    } else if ([dict[ZLPreviewPhotoTyp] integerValue] == ZLPreviewPhotoTypeURLImage) {
+                        imageObj.type = MWImageObjectTypeUrl;
+                    }
+                    [weakSelectImages addObject:imageObj];
+                }
+                [weakSelf updateSelectImages];
+            }];
+        }
+    } else if (section == 2) {
+        if ([self.moreItemDelegate respondsToSelector:@selector(clickItemForMoreItem:row:)]) {
+            [self.moreItemDelegate clickItemForMoreItem:[self.moreItemDataSource moreItemForRow:item] row:item];
+        }
     }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(_imageItemWidth, _imageItemWidth);
+    NSInteger section = indexPath.section;
+    if (section == 0) {
+        return CGSizeMake([UIScreen mainScreen].bounds.size.width-2*MARGIN, INPUT_VIEW_HEIGHT);
+    } else if (section == 1) {
+        return CGSizeMake(_imageItemWidth, _imageItemWidth);
+    } else if (section == 2) {
+        return CGSizeMake([UIScreen mainScreen].bounds.size.width-2*MARGIN, MORE_ITEM_CELL_HEIGHT);
+    }
+    return CGSizeZero;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return CGSizeMake(CGRectGetWidth(collectionView.frame), IMAGE_TIPS_HEIGHT);
+    if (section == 1) {
+        return CGSizeMake(CGRectGetWidth(collectionView.frame), IMAGE_TIPS_HEIGHT);
+    }
+    return CGSizeZero;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    if (section == 0) {
+        return CGSizeMake(CGRectGetWidth(collectionView.frame), DISTANCE_BETWEEN_TEXTVIEW_AND_IMAGE);
+    } else if (section == 1) {
+        return CGSizeMake(CGRectGetWidth(collectionView.frame), DISTANCE_BETWEEN_IMAGE_AND_MOREITEMS);
+    }
+    return CGSizeZero;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.item != _selectImages.count) {
+    NSInteger section = indexPath.section;
+    if (section == 1 && indexPath.item != _selectImages.count) {
         return YES;
     }
     return NO;
@@ -341,115 +398,36 @@
 
 - (NSIndexPath *)collectionView:(UICollectionView *)collectionView targetIndexPathForMoveFromItemAtIndexPath:(NSIndexPath *)originalIndexPath toProposedIndexPath:(NSIndexPath *)proposedIndexPath {
     /* 可以指定位置禁止交换 */
-    if (proposedIndexPath.item == _selectImages.count) {
-        return originalIndexPath;
-    } else {
+    if (proposedIndexPath.section == 1 && proposedIndexPath.item != _selectImages.count) {
         return proposedIndexPath;
-    }
-}
-
-#pragma mark - UITextViewDelegate
-- (void)textViewDidChange:(UITextView *)textView {
-    [self updatePlaceHolderStateWithText:textView.text];
-}
-
-#pragma mark UITableViewDataSource && UITableViewDelegate
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.moreItemDataSource && [self.moreItemDataSource respondsToSelector:@selector(moreItemCount)]) {
-        return [self.moreItemDataSource moreItemCount];
-    }
-    return 0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return MORE_ITEM_CELL_HEIGHT;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MWMoreItemCell *cell = [tableView dequeueReusableCellWithIdentifier:@"moreCell"];
-    if (!cell) {
-        cell = [[MWMoreItemCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"moreCell"];
-    }
-    [cell updateUIWithMoreItem:[self.moreItemDataSource moreItemForRow:indexPath.row] isFirst:indexPath.row == 0 ? YES : NO];
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([self.moreItemDelegate respondsToSelector:@selector(clickItemForMoreItem:row:)]) {
-        [self.moreItemDelegate clickItemForMoreItem:[self.moreItemDataSource moreItemForRow:indexPath.row] row:indexPath.row];
+    } else {
+        return originalIndexPath;
     }
 }
 
 #pragma mark - LazyLoad
-- (UIScrollView *)bgScrollView {
-    if (!_bgScrollView) {
-        self.bgScrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
-        [_bgScrollView addSubview:self.inputTextView];
-        _imageItemWidth = (CGRectGetWidth(_bgScrollView.bounds)-2*PADDING-2*DISTANCE_BETWEEN_IMAGES)/3.f;
-        [_bgScrollView addSubview:self.imageCollectionView];
-        [_bgScrollView addSubview:self.moreTableView];
-    }
-    return _bgScrollView;
-}
-
-- (UITextView *)inputTextView {
-    if (!_inputTextView) {
-        self.inputTextView = [[UITextView alloc] initWithFrame:CGRectMake(PADDING, 10.f, CGRectGetWidth(self.bgScrollView.bounds)-2*PADDING, INPUT_VIEW_HEIGHT)];
-        _inputTextView.font = [UIFont systemFontOfSize:16.f];
-        _inputTextView.delegate = self;
-        _inputTextView.contentInset = UIEdgeInsetsZero;
-        _inputTextView.textContainer.lineFragmentPadding = 0;
-        _inputTextView.textContainerInset = UIEdgeInsetsZero;
-        [_inputTextView addSubview:self.placeHolderLabel];
-    }
-    return _inputTextView;
-}
-
-- (UILabel *)placeHolderLabel {
-    if (!_placeHolderLabel) {
-        self.placeHolderLabel = [[UILabel alloc] initWithFrame:self.inputTextView.bounds];
-        _placeHolderLabel.font = self.inputTextView.font;
-        _placeHolderLabel.textColor = [UIColor lightGrayColor];
-        _placeHolderLabel.text = @"请输入内容";
-        _placeHolderLabel.numberOfLines = 0;
-        [_placeHolderLabel sizeToFit];
-    }
-    return _placeHolderLabel;
-}
-
-- (UICollectionView *)imageCollectionView {
-    if (!_imageCollectionView) {
+- (UICollectionView *)contentCollectionView {
+    if (!_contentCollectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.minimumLineSpacing = DISTANCE_BETWEEN_IMAGES;
         layout.minimumInteritemSpacing = DISTANCE_BETWEEN_IMAGES;
-        self.imageCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(PADDING, CGRectGetMaxY(self.inputTextView.frame)+DISTANCE_BETWEEN_TEXTVIEW_AND_IMAGE, CGRectGetWidth(self.inputTextView.frame), [self calImageCollectionViewHeight]) collectionViewLayout:layout];
-        _imageCollectionView.backgroundColor = [UIColor whiteColor];
-        _imageCollectionView.delegate = self;
-        _imageCollectionView.dataSource = self;
-        _imageCollectionView.clipsToBounds = NO;
-        _imageCollectionView.bounces = NO;
-        [_imageCollectionView registerClass:[MWImageCell class] forCellWithReuseIdentifier:@"imageCell"];
-        [_imageCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"tipsHeader"];
+        layout.sectionInset = UIEdgeInsetsMake(0, MARGIN, 0, MARGIN);
+        self.contentCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.f, 0.f, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)) collectionViewLayout:layout];
+        _contentCollectionView.backgroundColor = [UIColor whiteColor];
+        _contentCollectionView.delegate = self;
+        _contentCollectionView.dataSource = self;
+        _contentCollectionView.clipsToBounds = NO;
+        _contentCollectionView.bounces = NO;
+        [_contentCollectionView registerClass:[MWInputTextCell class] forCellWithReuseIdentifier:@"textCell"];
+        [_contentCollectionView registerClass:[MWImageCell class] forCellWithReuseIdentifier:@"imageCell"];
+        [_contentCollectionView registerClass:[MWMoreItemCell class] forCellWithReuseIdentifier:@"moreItemCell"];
+        [_contentCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"blankCell"];
+        [_contentCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"tipsHeader"];
+        [_contentCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"tipsFooter"];
         UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
-        [_imageCollectionView addGestureRecognizer:longPressGesture];
+        [_contentCollectionView addGestureRecognizer:longPressGesture];
     }
-    return _imageCollectionView;
-}
-
-- (UITableView *)moreTableView {
-    if (!_moreTableView) {
-        self.moreTableView = [[UITableView alloc] initWithFrame:CGRectMake(PADDING, CGRectGetMaxY(self.imageCollectionView.frame)+DISTANCE_BETWEEN_IMAGE_AND_MOREITEMS, CGRectGetWidth(self.imageCollectionView.frame), 0) style:UITableViewStylePlain];
-        _moreTableView.delegate = self;
-        _moreTableView.dataSource = self;
-        _moreTableView.bounces = NO;
-        _moreTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    }
-    return _moreTableView;
+    return _contentCollectionView;
 }
 
 - (ZLPhotoActionSheet *)photoActionSheet {
@@ -462,6 +440,18 @@
     photoActionSheet.configuration.languageType = ZLLanguageChineseSimplified;
     photoActionSheet.configuration.allowRecordVideo = NO;
     return photoActionSheet;
+}
+
+- (UIView *)removeAreaButton {
+    if (!_removeAreaButton) {
+        self.removeAreaButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _removeAreaButton.hidden = YES;
+        _removeAreaButton.backgroundColor = [UIColor colorWithRed:210/225.f green:20/225.f blue:20/225.f alpha:1.0];
+        _removeAreaButton.titleLabel.font = [UIFont systemFontOfSize:16.f];
+        [_removeAreaButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_removeAreaButton setTitle:@"拖动此处删除" forState:UIControlStateNormal];
+    }
+    return _removeAreaButton;
 }
 
 @end

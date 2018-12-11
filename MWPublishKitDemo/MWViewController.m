@@ -7,7 +7,7 @@
 //
 
 #import "MWViewController.h"
-#import "MWPublishKit.h"
+@import MWPublishKit;
 
 @interface MWViewController () <MWPublishViewMoreItemDataSource, MWPublishViewMoreItemDelegate>
 
@@ -22,7 +22,7 @@
                                                      moreItemDelegate:self];
     publishView.placeHolder = @"哈哈哈";
     publishView.textColor = [UIColor blackColor];
-    publishView.textFont = [UIFont systemFontOfSize:16];
+    publishView.textFont = [UIFont systemFontOfSize:20];
     MWImageObject *test = [[MWImageObject alloc] init];
     test.type = MWImageObjectTypeUrl;
     test.contentObject = [NSURL URLWithString:@"http://pic.ffpic.com/files/tupian/tupian0277.jpg"];

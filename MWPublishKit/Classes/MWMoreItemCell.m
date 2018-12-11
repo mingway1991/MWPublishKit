@@ -20,8 +20,9 @@
 
 @implementation MWMoreItemCell
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
         [self.contentView addSubview:self.iconImageView];
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.topLineView];
@@ -64,7 +65,7 @@
 #pragma mark - LazyLoad
 - (UIImageView *)iconImageView {
     if (!_iconImageView) {
-        CGFloat width = 20.f;
+        CGFloat width = 18.f;
         self.iconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, (MORE_ITEM_CELL_HEIGHT-width)/2.f, width, width)];
     }
     return _iconImageView;

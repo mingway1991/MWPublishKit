@@ -15,6 +15,12 @@ DEPENDENCIES:
   - SDWebImage
   - ZLPhotoBrowser
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - GPUImage
+    - SDWebImage
+    - ZLPhotoBrowser
+
 EXTERNAL SOURCES:
   MWPublishKit:
     :path: MWPublishKit.podspec
@@ -27,4 +33,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 44919e7e5398e27f3f0511d696729c54d7e19c82
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.6.0.beta.2

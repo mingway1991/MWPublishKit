@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 @class MWMoreItem;
 
-@interface MWMoreItemCell : UITableViewCell
+@interface MWMoreItemCell : UICollectionViewCell
 
 - (void)updateUIWithMoreItem:(MWMoreItem *)moreItem isFirst:(BOOL)isFirst;
 
