@@ -38,12 +38,16 @@
 }
 
 - (void)setFont:(UIFont *)font {
-    self.placeHolderLabel.font = font;
-    self.inputTextView.font = font;
+    if (font) {
+        self.placeHolderLabel.font = font;
+        self.inputTextView.font = font;
+    }
 }
 
 - (void)setTextColor:(UIColor *)textColor {
-    self.inputTextView.textColor = textColor;
+    if (textColor) {
+        self.inputTextView.textColor = textColor;
+    }
 }
 
 - (void)setPlaceHolder:(NSString *)placeHolder {
@@ -88,6 +92,7 @@
 - (UILabel *)placeHolderLabel {
     if (!_placeHolderLabel) {
         self.placeHolderLabel = [[UILabel alloc] initWithFrame:self.inputTextView.bounds];
+        _placeHolderLabel.font = [UIFont systemFontOfSize:16.f];
         _placeHolderLabel.font = self.inputTextView.font;
         _placeHolderLabel.textColor = [UIColor lightGrayColor];
         _placeHolderLabel.text = @"请输入内容";
