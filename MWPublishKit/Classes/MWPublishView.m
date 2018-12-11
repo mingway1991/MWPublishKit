@@ -62,7 +62,7 @@
 }
 
 - (void)setup {
-    _imageItemWidth = ([UIScreen mainScreen].bounds.size.width-2*MARGIN-2*DISTANCE_BETWEEN_IMAGES)/3.f;
+    _imageItemWidth = floorf(([UIScreen mainScreen].bounds.size.width-2*MARGIN-2*DISTANCE_BETWEEN_IMAGES)/3.f);
     _selectImages = [NSMutableArray array];
     [self addSubview:self.contentCollectionView];
     [self addSubview:self.removeAreaButton];
