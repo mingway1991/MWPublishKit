@@ -26,6 +26,8 @@
 #define DISTANCE_BETWEEN_TEXTVIEW_AND_IMAGE 10.f
 /* 图片选择区域与更多条目距离 */
 #define DISTANCE_BETWEEN_IMAGE_AND_MOREITEMS 30.f
+/* */
+#define DISTANCE_BOTTOM_MARGIN 50.f
 /* 删除区域高度 */
 #define REMOVE_AREA_HEIGHT 60.f
 
