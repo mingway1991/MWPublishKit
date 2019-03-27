@@ -29,6 +29,8 @@
 @property (nonatomic, strong) MWInputTextCell *inputTextCell;
 @property (nonatomic, strong) UICollectionView *contentCollectionView;
 @property (nonatomic, strong) UIButton *removeAreaButton;   //图片移除区域
+@property (nonatomic, strong) ZLPhotoActionSheet *photoActionSheet;
+@property (nonatomic, strong) UICollectionViewFlowLayout *layout;
 
 @end
 
@@ -59,8 +61,10 @@
 }
 
 - (void)setup {
+    self.inputViewHeight = 150.f;
+    self.leftRightMargin = 15.f;
+    self.enablePreview = YES;
     self.clipsToBounds = YES;
-    _imageItemWidth = floorf(([UIScreen mainScreen].bounds.size.width-2*MARGIN-2*DISTANCE_BETWEEN_IMAGES)/3.f);
     _selectImages = [NSMutableArray array];
     [self addSubview:self.contentCollectionView];
     [self addSubview:self.removeAreaButton];
@@ -107,22 +111,60 @@
 }
 
 #pragma mark - Setter
-/* 设置placeHolder文本 */
+- (void)setLeftRightMargin:(CGFloat)leftRightMargin {
+    _leftRightMargin = leftRightMargin;
+    _imageItemWidth = floorf(([UIScreen mainScreen].bounds.size.width-2*leftRightMargin-2*DISTANCE_BETWEEN_IMAGES)/3.f);
+    self.layout.sectionInset = UIEdgeInsetsMake(0, leftRightMargin, 0, leftRightMargin);
+}
+
 - (void)setPlaceHolder:(NSString *)placeHolder {
     _placeHolder = placeHolder;
     [self.inputTextCell setPlaceHolder:placeHolder];
 }
 
-/* 设置文本字体 */
 - (void)setTextFont:(UIFont *)textFont {
     _textFont = textFont;
     [self.inputTextCell setFont:textFont];
 }
 
-/* 设置文本颜色 */
 - (void)setTextColor:(UIColor *)textColor {
     _textColor = textColor;
     [self.inputTextCell setTextColor:textColor];
+}
+
+- (void)setSender:(UIViewController *)sender {
+    _sender = sender;
+    self.photoActionSheet.sender = sender;
+}
+
+- (void)setNavBarColor:(UIColor *)navBarColor {
+    _navBarColor = navBarColor;
+    self.photoActionSheet.configuration.navBarColor = navBarColor;
+}
+
+- (void)setNavTitleColor:(UIColor *)navTitleColor {
+    _navTitleColor = navTitleColor;
+    self.photoActionSheet.configuration.navTitleColor = navTitleColor;
+}
+
+- (void)setBottomViewBgColor:(UIColor *)bottomViewBgColor {
+    _bottomViewBgColor = bottomViewBgColor;
+    self.photoActionSheet.configuration.bottomViewBgColor = bottomViewBgColor;
+}
+
+- (void)setBottomBtnsNormalTitleColor:(UIColor *)bottomBtnsNormalTitleColor {
+    _bottomBtnsNormalTitleColor = bottomBtnsNormalTitleColor;
+    self.photoActionSheet.configuration.bottomBtnsNormalTitleColor = bottomBtnsNormalTitleColor;
+}
+
+- (void)setBottomBtnsDisableBgColor:(UIColor *)bottomBtnsDisableBgColor {
+    _bottomBtnsDisableBgColor = bottomBtnsDisableBgColor;
+    self.photoActionSheet.configuration.bottomBtnsDisableBgColor = bottomBtnsDisableBgColor;
+}
+
+- (void)setCustomImageNames:(NSArray<NSString *> *)customImageNames {
+    _customImageNames = customImageNames;
+    self.photoActionSheet.configuration.customImageNames = customImageNames;
 }
 
 #pragma mark - Helper
@@ -139,12 +181,11 @@
 
 /* 跳转选择图片ActionSheet  */
 - (void)selectImage {
-    ZLPhotoActionSheet *photoActionSheet = [self photoActionSheet];
-    photoActionSheet.configuration.maxSelectCount = IMAGE_MAX_COUNT-_selectImages.count;
+    self.photoActionSheet.configuration.maxSelectCount = IMAGE_MAX_COUNT-_selectImages.count;
     //选择回调
     __weak typeof(_selectImages) weakSelectImages =_selectImages;
     __weak typeof(self) weakSelf = self;
-    [photoActionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
+    [self.photoActionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
         for (UIImage *image in images) {
             MWImageObject *obj = [[MWImageObject alloc] init];
             obj.type = MWImageObjectTypeImage;
@@ -154,7 +195,11 @@
         [weakSelf updateSelectImages];
     }];
     //调用相册
-    [photoActionSheet showPreviewAnimated:YES];
+    if (self.enablePreview) {
+        [self.photoActionSheet showPreviewAnimated:YES];
+    } else {
+        [self.photoActionSheet showPhotoLibrary];
+    }
 }
 
 /* 更改选择图片数量 */
@@ -324,11 +369,11 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger section = indexPath.section;
     if (section == 0) {
-        return CGSizeMake([UIScreen mainScreen].bounds.size.width-2*MARGIN, INPUT_VIEW_HEIGHT);
+        return CGSizeMake([UIScreen mainScreen].bounds.size.width-2*self.leftRightMargin, self.inputViewHeight);
     } else if (section == 1) {
         return CGSizeMake(_imageItemWidth, _imageItemWidth);
     } else if (section == 2) {
-        return CGSizeMake([UIScreen mainScreen].bounds.size.width-2*MARGIN, MORE_ITEM_CELL_HEIGHT);
+        return CGSizeMake([UIScreen mainScreen].bounds.size.width-2*self.leftRightMargin, MORE_ITEM_CELL_HEIGHT);
     }
     return CGSizeZero;
 }
@@ -392,12 +437,12 @@
 #pragma mark - LazyLoad
 - (UICollectionView *)contentCollectionView {
     if (!_contentCollectionView) {
-        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.scrollDirection = UICollectionViewScrollDirectionVertical;
-        layout.minimumLineSpacing = DISTANCE_BETWEEN_IMAGES;
-        layout.minimumInteritemSpacing = DISTANCE_BETWEEN_IMAGES;
-        layout.sectionInset = UIEdgeInsetsMake(0, MARGIN, 0, MARGIN);
-        self.contentCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.f, 0.f, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)) collectionViewLayout:layout];
+        self.layout = [[UICollectionViewFlowLayout alloc] init];
+        self.layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+        self.layout.minimumLineSpacing = DISTANCE_BETWEEN_IMAGES;
+        self.layout.minimumInteritemSpacing = DISTANCE_BETWEEN_IMAGES;
+        self.layout.sectionInset = UIEdgeInsetsMake(0, self.leftRightMargin, 0, self.leftRightMargin);
+        self.contentCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.f, 0.f, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)) collectionViewLayout:self.layout];
         _contentCollectionView.backgroundColor = [UIColor whiteColor];
         _contentCollectionView.delegate = self;
         _contentCollectionView.dataSource = self;
@@ -416,15 +461,37 @@
 }
 
 - (ZLPhotoActionSheet *)photoActionSheet {
-    ZLPhotoActionSheet *photoActionSheet = [[ZLPhotoActionSheet alloc] init];
-    photoActionSheet.configuration.maxPreviewCount = 10;
-    photoActionSheet.sender = self.sender;
-    photoActionSheet.configuration.allowSelectVideo = NO;
-    photoActionSheet.configuration.allowSelectGif = YES;
-    photoActionSheet.configuration.allowSelectOriginal = YES;
-    photoActionSheet.configuration.languageType = ZLLanguageChineseSimplified;
-    photoActionSheet.configuration.allowRecordVideo = NO;
-    return photoActionSheet;
+    if (!_photoActionSheet) {
+        self.photoActionSheet = [[ZLPhotoActionSheet alloc] init];
+        _photoActionSheet.configuration.maxPreviewCount = 10;
+        if (self.sender) {
+            _photoActionSheet.sender = self.sender;
+        }
+        _photoActionSheet.configuration.allowSelectVideo = NO;
+        _photoActionSheet.configuration.allowSelectGif = YES;
+        _photoActionSheet.configuration.allowSelectOriginal = YES;
+        _photoActionSheet.configuration.languageType = ZLLanguageChineseSimplified;
+        _photoActionSheet.configuration.allowRecordVideo = NO;
+        if (self.navBarColor) {
+            _photoActionSheet.configuration.navBarColor = self.navBarColor;
+        }
+        if (self.navTitleColor) {
+            _photoActionSheet.configuration.navTitleColor = self.navTitleColor;
+        }
+        if (self.bottomViewBgColor) {
+            _photoActionSheet.configuration.bottomViewBgColor = self.bottomViewBgColor;
+        }
+        if (self.bottomBtnsNormalTitleColor) {
+            _photoActionSheet.configuration.bottomBtnsNormalTitleColor = self.bottomBtnsNormalTitleColor;
+        }
+        if (self.bottomBtnsDisableBgColor) {
+            _photoActionSheet.configuration.bottomBtnsDisableBgColor = self.bottomBtnsDisableBgColor;
+        }
+        if (self.customImageNames) {
+            _photoActionSheet.configuration.customImageNames = self.customImageNames;
+        }
+    }
+    return _photoActionSheet;
 }
 
 - (UIView *)removeAreaButton {

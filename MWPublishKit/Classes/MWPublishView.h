@@ -31,6 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MWPublishView : UIView
 
+/* 输入文本区域高度 */
+@property (nonatomic, assign) CGFloat inputViewHeight;
+/* 左右间距 */
+@property (nonatomic, assign) CGFloat leftRightMargin;
 /* 文本占位文字 */
 @property (nonatomic, copy, setter=setPlaceHolder:) NSString *placeHolder;
 /* 文字字体 */
@@ -43,6 +47,20 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<MWPublishViewMoreItemDelegate> moreItemDelegate;
 /* 图片选择器需要，传当前控制器即可 */
 @property (nonatomic, weak) UIViewController *sender;
+/* 导航条颜色，默认 rgb(19, 153, 231) */
+@property (nonatomic, strong) UIColor *navBarColor;
+/* 导航标题颜色，默认 rgb(255, 255, 255) */
+@property (nonatomic, strong) UIColor *navTitleColor;
+/* 底部工具条底色，默认 rgb(255, 255, 255) */
+@property (nonatomic, strong) UIColor *bottomViewBgColor;
+/* 底部工具栏按钮 可交互 状态标题颜色，底部 toolbar 按钮可交互状态title颜色均使用这个，确定按钮 可交互 的背景色为这个，默认rgb(80, 180, 234) */
+@property (nonatomic, strong) UIColor *bottomBtnsNormalTitleColor;
+/* 底部工具栏按钮 不可交互 状态标题颜色，底部 toolbar 按钮不可交互状态颜色均使用这个，确定按钮 不可交互 的背景色为这个，默认rgb(200, 200, 200) */
+@property (nonatomic, strong) UIColor *bottomBtnsDisableBgColor;
+/* 支持开发者自定义图片，但是所自定义图片资源名称必须与被替换的bundle中的图片名称一致 */
+@property (nonatomic, strong) NSArray<NSString *> *customImageNames;
+/* 是否支持预览前几张图片 */
+@property (nonatomic, assign) BOOL enablePreview;
 
 #pragma mark - init
 - (instancetype)init NS_UNAVAILABLE;

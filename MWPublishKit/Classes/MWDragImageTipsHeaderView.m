@@ -43,7 +43,7 @@
 - (UIImageView *)tipsImageView {
     if (!_tipsImageView) {
         CGFloat itemHeight = 16.f;
-        self.tipsImageView = [[UIImageView alloc] initWithFrame:CGRectMake(MARGIN, 5.f, itemHeight, itemHeight)];
+        self.tipsImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15.f, 5.f, itemHeight, itemHeight)];
         _tipsImageView.image = [MWImageHelper loadImageWithName:@"tips"];
     }
     return _tipsImageView;

@@ -20,9 +20,19 @@
     MWPublishView *publishView = [[MWPublishView alloc] initWithFrame:CGRectMake(0, 20.f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-20.f)
                                                    moreItemDataSource:self
                                                      moreItemDelegate:self];
+    publishView.inputViewHeight = 400.f;
+    publishView.leftRightMargin = 20.f;
     publishView.placeHolder = @"哈哈哈";
+    publishView.customImageNames = @[@"zl_btn_selected",@"zl_btn_unselected",@"zl_navBack"];
     publishView.textColor = [UIColor blackColor];
     publishView.textFont = [UIFont systemFontOfSize:20];
+    publishView.navBarColor = [UIColor whiteColor];
+    publishView.navTitleColor = [UIColor blackColor];
+    publishView.bottomViewBgColor = [UIColor whiteColor];
+    publishView.bottomBtnsNormalTitleColor = [UIColor blackColor];
+    publishView.bottomBtnsDisableBgColor = [UIColor grayColor];
+    publishView.enablePreview = NO;
+    
     MWImageObject *test = [[MWImageObject alloc] init];
     test.type = MWImageObjectTypeUrl;
     test.contentObject = [NSURL URLWithString:@"http://pic.ffpic.com/files/tupian/tupian0277.jpg"];
