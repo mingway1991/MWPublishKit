@@ -295,9 +295,6 @@
     NSInteger section = indexPath.section;
     NSInteger item = indexPath.item;
     if (section == 0) {
-        if (!self.inputTextCell) {
-            self.inputTextCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"textCell" forIndexPath:indexPath];
-        }
         [self.inputTextCell setTextColor:_textColor];
         [self.inputTextCell setFont:_textFont];
         [self.inputTextCell setPlaceHolder:_placeHolder];
@@ -518,6 +515,13 @@
         _removeAreaButton.imageEdgeInsets = imageEdgeInsets;
     }
     return _removeAreaButton;
+}
+
+- (MWInputTextCell *)inputTextCell {
+    if (!_inputTextCell) {
+        self.inputTextCell = [self.contentCollectionView dequeueReusableCellWithReuseIdentifier:@"textCell" forIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+    }
+    return _inputTextCell;
 }
 
 @end

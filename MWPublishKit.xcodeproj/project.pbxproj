@@ -45,7 +45,7 @@
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6003F5AE195388D20070C39A /* MWPublishKit_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MWPublishKit_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		7A273EC8212BE703002D253C /* MWPublishKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWPublishKit.podspec; sourceTree = "<group>"; };
+		7A273EC8212BE703002D253C /* MWPublishKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWPublishKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		7A273EC9212BE703002D253C /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		7A273ECA212BE703002D253C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7A273ECE212BE720002D253C /* MWAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWAppDelegate.h; path = MWPublishKitDemo/MWAppDelegate.h; sourceTree = SOURCE_ROOT; };

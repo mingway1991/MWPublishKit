@@ -35,6 +35,7 @@
 
 - (void)setText:(NSString *)text {
     self.inputTextView.text = text;
+    [self updatePlaceHolderStateWithText:text];
 }
 
 - (void)setFont:(UIFont *)font {
