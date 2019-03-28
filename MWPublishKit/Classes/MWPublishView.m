@@ -240,20 +240,17 @@
         case UIGestureRecognizerStateEnded:
             //停止移动调用此方法
             if (@available(iOS 9.0, *)) {
-                
+                [self.contentCollectionView endInteractiveMovement];
                 //判断位置是否在删除区域
                 CGPoint location = [longPress locationInView:self];
                 if (CGRectContainsPoint(self.removeAreaButton.frame, location)) {
-                    NSLog(@"删除");
                     NSIndexPath *indexPath = [self.contentCollectionView indexPathForItemAtPoint:_beginDragPoint];
                     if (indexPath) {
                         [_selectImages removeObjectAtIndex:indexPath.item];
                         [self.contentCollectionView reloadData];
                     }
                 }
-                
                 self.removeAreaButton.hidden = YES;
-                [self.contentCollectionView endInteractiveMovement];
             } else {
                 // Fallback on earlier versions
             }

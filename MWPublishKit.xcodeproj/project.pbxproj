@@ -180,6 +180,7 @@
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
 				0766523E73BD675CC3CE68A4 /* [CP] Embed Pods Frameworks */,
+				5F3CA564BA329AF9F023BE8F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -289,7 +290,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MWPublishKit_Example/Pods-MWPublishKit_Example-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MWPublishKit_Example/Pods-MWPublishKit_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5F3CA564BA329AF9F023BE8F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MWPublishKit_Example/Pods-MWPublishKit_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		91AFEA95C2DA65CA763F8B39 /* [CP] Check Pods Manifest.lock */ = {
@@ -449,6 +465,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MWPublishKitDemo/MWPublishKit-Prefix.pch";
 				INFOPLIST_FILE = "MWPublishKitDemo/MWPublishKit-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -464,6 +481,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MWPublishKitDemo/MWPublishKit-Prefix.pch";
 				INFOPLIST_FILE = "MWPublishKitDemo/MWPublishKit-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
