@@ -24,6 +24,7 @@
     NSMutableArray<MWImageObject *> *_selectImages;     //保存选择图片对象的数组
     CGFloat _imageItemWidth;                            //图片条目的宽度
     CGPoint _beginDragPoint;
+    NSIndexPath *_dragItemIndexPath;
 }
 
 @property (nonatomic, strong) MWInputTextCell *inputTextCell;
@@ -211,13 +212,13 @@
                 //判断位置是否在删除区域
                 CGPoint location = [longPress locationInView:self];
                 if (CGRectContainsPoint(self.removeAreaButton.frame, location)) {
-                    NSIndexPath *indexPath = [self.contentCollectionView indexPathForItemAtPoint:_beginDragPoint];
-                    if (indexPath) {
-                        [_selectImages removeObjectAtIndex:indexPath.item];
+                    if (_dragItemIndexPath) {
+                        [_selectImages removeObjectAtIndex:_dragItemIndexPath.item];
                         [self.contentCollectionView reloadData];
                     }
                 }
                 self.removeAreaButton.hidden = YES;
+                _dragItemIndexPath = nil;
             } else {
                 // Fallback on earlier versions
             }
@@ -375,6 +376,7 @@
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger section = indexPath.section;
     if (section == 1 && indexPath.item != _selectImages.count) {
+        _dragItemIndexPath = indexPath;
         return YES;
     }
     return NO;
@@ -385,6 +387,7 @@
     id objc = [_selectImages objectAtIndex:sourceIndexPath.item];
     [_selectImages removeObject:objc];
     [_selectImages insertObject:objc atIndex:destinationIndexPath.item];
+    _dragItemIndexPath = destinationIndexPath;
 }
 
 - (NSIndexPath *)collectionView:(UICollectionView *)collectionView targetIndexPathForMoveFromItemAtIndexPath:(NSIndexPath *)originalIndexPath toProposedIndexPath:(NSIndexPath *)proposedIndexPath {
