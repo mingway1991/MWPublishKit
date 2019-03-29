@@ -29,7 +29,6 @@
 @property (nonatomic, strong) MWInputTextCell *inputTextCell;
 @property (nonatomic, strong) UICollectionView *contentCollectionView;
 @property (nonatomic, strong) UIButton *removeAreaButton;   //图片移除区域
-@property (nonatomic, strong) ZLPhotoActionSheet *photoActionSheet;
 @property (nonatomic, strong) UICollectionViewFlowLayout *layout;
 
 @end
@@ -87,7 +86,7 @@
 /* 设置默认图片 */
 - (void)configSelectedImageObjects:(NSArray<MWImageObject *> *)imageObjects {
     [_selectImages addObjectsFromArray:imageObjects];
-    [self updateSelectImages];
+    [self.contentCollectionView reloadData];
 }
 
 /* 设置默认文本 */
@@ -132,41 +131,6 @@
     [self.inputTextCell setTextColor:textColor];
 }
 
-- (void)setSender:(UIViewController *)sender {
-    _sender = sender;
-    self.photoActionSheet.sender = sender;
-}
-
-- (void)setNavBarColor:(UIColor *)navBarColor {
-    _navBarColor = navBarColor;
-    self.photoActionSheet.configuration.navBarColor = navBarColor;
-}
-
-- (void)setNavTitleColor:(UIColor *)navTitleColor {
-    _navTitleColor = navTitleColor;
-    self.photoActionSheet.configuration.navTitleColor = navTitleColor;
-}
-
-- (void)setBottomViewBgColor:(UIColor *)bottomViewBgColor {
-    _bottomViewBgColor = bottomViewBgColor;
-    self.photoActionSheet.configuration.bottomViewBgColor = bottomViewBgColor;
-}
-
-- (void)setBottomBtnsNormalTitleColor:(UIColor *)bottomBtnsNormalTitleColor {
-    _bottomBtnsNormalTitleColor = bottomBtnsNormalTitleColor;
-    self.photoActionSheet.configuration.bottomBtnsNormalTitleColor = bottomBtnsNormalTitleColor;
-}
-
-- (void)setBottomBtnsDisableBgColor:(UIColor *)bottomBtnsDisableBgColor {
-    _bottomBtnsDisableBgColor = bottomBtnsDisableBgColor;
-    self.photoActionSheet.configuration.bottomBtnsDisableBgColor = bottomBtnsDisableBgColor;
-}
-
-- (void)setCustomImageNames:(NSArray<NSString *> *)customImageNames {
-    _customImageNames = customImageNames;
-    self.photoActionSheet.configuration.customImageNames = customImageNames;
-}
-
 #pragma mark - Helper
 /* 计算图片item个数（包含加号） */
 - (NSInteger)calImageCollectionViewItemCount {
@@ -181,29 +145,32 @@
 
 /* 跳转选择图片ActionSheet  */
 - (void)selectImage {
-    self.photoActionSheet.configuration.maxSelectCount = IMAGE_MAX_COUNT-_selectImages.count;
+    ZLPhotoActionSheet *photoActionSheet = [self photoActionSheet];
+    photoActionSheet.configuration.maxSelectCount = IMAGE_MAX_COUNT-_selectImages.count;
     //选择回调
-    __weak typeof(_selectImages) weakSelectImages =_selectImages;
     __weak typeof(self) weakSelf = self;
-    [self.photoActionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
+    __weak typeof(_selectImages) weakSelectImages =_selectImages;
+    [photoActionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
+        NSMutableArray *selectImages = [NSMutableArray arrayWithArray:weakSelectImages];
         for (UIImage *image in images) {
             MWImageObject *obj = [[MWImageObject alloc] init];
             obj.type = MWImageObjectTypeImage;
             obj.contentObject = image;
-            [weakSelectImages addObject:obj];
+            [selectImages addObject:obj];
         }
-        [weakSelf updateSelectImages];
+        [weakSelf updateSelectImages:selectImages];
     }];
     //调用相册
     if (self.enablePreview) {
-        [self.photoActionSheet showPreviewAnimated:YES];
+        [photoActionSheet showPreviewAnimated:YES];
     } else {
-        [self.photoActionSheet showPhotoLibrary];
+        [photoActionSheet showPhotoLibrary];
     }
 }
 
 /* 更改选择图片数量 */
-- (void)updateSelectImages {
+- (void)updateSelectImages:(NSMutableArray *)selectImages {
+    _selectImages = selectImages;
     [self.contentCollectionView reloadData];
 }
 
@@ -335,11 +302,10 @@
                     [models addObject:GetDictForPreviewPhoto(imgObject.contentObject, ZLPreviewPhotoTypeUIImage)];
                 }
             }
-            __weak typeof(_selectImages) weakSelectImages =_selectImages;
             __weak typeof(self) weakSelf = self;
             ZLPhotoActionSheet *photoActionSheet = [self photoActionSheet];
             [photoActionSheet previewPhotos:models index:indexPath.row hideToolBar:NO complete:^(NSArray * _Nonnull photos) {
-                [weakSelectImages removeAllObjects];
+                NSMutableArray *selectImages = [NSMutableArray array];
                 for (NSDictionary *dict in photos) {
                     MWImageObject *imageObj = [[MWImageObject alloc] init];
                     imageObj.contentObject = dict[ZLPreviewPhotoObj];
@@ -347,10 +313,12 @@
                         imageObj.type = MWImageObjectTypeImage;
                     } else if ([dict[ZLPreviewPhotoTyp] integerValue] == ZLPreviewPhotoTypeURLImage) {
                         imageObj.type = MWImageObjectTypeUrl;
+                    } else {
+                        continue;
                     }
-                    [weakSelectImages addObject:imageObj];
+                    [selectImages addObject:imageObj];
                 }
-                [weakSelf updateSelectImages];
+                [weakSelf updateSelectImages:selectImages];
             }];
         }
     } else if (section == 2) {
@@ -455,37 +423,35 @@
 }
 
 - (ZLPhotoActionSheet *)photoActionSheet {
-    if (!_photoActionSheet) {
-        self.photoActionSheet = [[ZLPhotoActionSheet alloc] init];
-        _photoActionSheet.configuration.maxPreviewCount = 10;
-        if (self.sender) {
-            _photoActionSheet.sender = self.sender;
-        }
-        _photoActionSheet.configuration.allowSelectVideo = NO;
-        _photoActionSheet.configuration.allowSelectGif = YES;
-        _photoActionSheet.configuration.allowSelectOriginal = YES;
-        _photoActionSheet.configuration.languageType = ZLLanguageChineseSimplified;
-        _photoActionSheet.configuration.allowRecordVideo = NO;
-        if (self.navBarColor) {
-            _photoActionSheet.configuration.navBarColor = self.navBarColor;
-        }
-        if (self.navTitleColor) {
-            _photoActionSheet.configuration.navTitleColor = self.navTitleColor;
-        }
-        if (self.bottomViewBgColor) {
-            _photoActionSheet.configuration.bottomViewBgColor = self.bottomViewBgColor;
-        }
-        if (self.bottomBtnsNormalTitleColor) {
-            _photoActionSheet.configuration.bottomBtnsNormalTitleColor = self.bottomBtnsNormalTitleColor;
-        }
-        if (self.bottomBtnsDisableBgColor) {
-            _photoActionSheet.configuration.bottomBtnsDisableBgColor = self.bottomBtnsDisableBgColor;
-        }
-        if (self.customImageNames) {
-            _photoActionSheet.configuration.customImageNames = self.customImageNames;
-        }
+    ZLPhotoActionSheet *photoActionSheet = [[ZLPhotoActionSheet alloc] init];
+    photoActionSheet.configuration.maxPreviewCount = 10;
+    if (self.sender) {
+        photoActionSheet.sender = self.sender;
     }
-    return _photoActionSheet;
+    photoActionSheet.configuration.allowSelectVideo = NO;
+    photoActionSheet.configuration.allowSelectGif = YES;
+    photoActionSheet.configuration.allowSelectOriginal = YES;
+    photoActionSheet.configuration.languageType = ZLLanguageChineseSimplified;
+    photoActionSheet.configuration.allowRecordVideo = NO;
+    if (self.navBarColor) {
+        photoActionSheet.configuration.navBarColor = self.navBarColor;
+    }
+    if (self.navTitleColor) {
+        photoActionSheet.configuration.navTitleColor = self.navTitleColor;
+    }
+    if (self.bottomViewBgColor) {
+        photoActionSheet.configuration.bottomViewBgColor = self.bottomViewBgColor;
+    }
+    if (self.bottomBtnsNormalTitleColor) {
+        photoActionSheet.configuration.bottomBtnsNormalTitleColor = self.bottomBtnsNormalTitleColor;
+    }
+    if (self.bottomBtnsDisableBgColor) {
+        photoActionSheet.configuration.bottomBtnsDisableBgColor = self.bottomBtnsDisableBgColor;
+    }
+    if (self.customImageNames) {
+        photoActionSheet.configuration.customImageNames = self.customImageNames;
+    }
+    return photoActionSheet;
 }
 
 - (UIView *)removeAreaButton {
