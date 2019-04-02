@@ -26,6 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 设置占位文字 */
 - (void)setPlaceHolder:(NSString *)placeHolder;
 
+/** 设置占位文字颜色 */
+- (void)setPlaceHolderColor:(UIColor *)placeHolderColor;
+
 /** 取消键盘响应 */
 - (void)resignTextViewFisrtResponder;
 

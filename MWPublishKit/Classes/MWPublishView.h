@@ -31,16 +31,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MWPublishView : UIView
 
-/* 输入文本区域高度 */
+/* 输入文本区域高度，默认150 */
 @property (nonatomic, assign) CGFloat inputViewHeight;
-/* 左右间距 */
+/* 左右间距，默认15 */
 @property (nonatomic, assign) CGFloat leftRightMargin;
 /* 文本占位文字 */
 @property (nonatomic, copy, setter=setPlaceHolder:) NSString *placeHolder;
-/* 文字字体 */
+/* 文本占位文字颜色，默认[UIColor lightGrayColor] */
+@property (nonatomic, strong, setter=setPlaceHolderColor:) UIColor *placeHolderColor;
+/* 文字字体，默认[UIFont systemFontOfSize:16.f] */
 @property (nonatomic, strong, setter=setTextFont:) UIFont *textFont;
 /* 文字颜色 */
 @property (nonatomic, strong, setter=setTextColor:) UIColor *textColor;
+/* 删除区域高度， 默认60 */
+@property (nonatomic, assign) CGFloat removeAreaHeight;
 /* 更多选项数据源 */
 @property (nonatomic, weak) id<MWPublishViewMoreItemDataSource> moreItemDataSource;
 /* 更多选项代理 */

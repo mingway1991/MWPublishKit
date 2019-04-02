@@ -57,12 +57,15 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.contentCollectionView.frame = CGRectMake(0.f, 0.f, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    self.removeAreaButton.frame = CGRectMake(0.f, CGRectGetHeight(self.bounds)-REMOVE_AREA_HEIGHT, CGRectGetWidth(self.bounds), REMOVE_AREA_HEIGHT);
+    self.removeAreaButton.frame = CGRectMake(0.f, CGRectGetHeight(self.bounds)-self.removeAreaHeight, CGRectGetWidth(self.bounds), self.removeAreaHeight);
 }
 
 - (void)setup {
     self.inputViewHeight = 150.f;
     self.leftRightMargin = 15.f;
+    self.removeAreaHeight = 60.f;
+    self.textFont = [UIFont systemFontOfSize:16.f];
+    self.placeHolderColor = [UIColor lightGrayColor];
     self.enablePreview = YES;
     self.clipsToBounds = YES;
     _selectImages = [NSMutableArray array];
@@ -111,6 +114,12 @@
 }
 
 #pragma mark - Setter
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
+    [super setBackgroundColor:backgroundColor];
+    self.inputTextCell.backgroundColor = backgroundColor;
+    self.contentCollectionView.backgroundColor = backgroundColor;
+}
+
 - (void)setLeftRightMargin:(CGFloat)leftRightMargin {
     _leftRightMargin = leftRightMargin;
     _imageItemWidth = floorf(([UIScreen mainScreen].bounds.size.width-2*leftRightMargin-2*DISTANCE_BETWEEN_IMAGES)/3.f);
@@ -120,6 +129,11 @@
 - (void)setPlaceHolder:(NSString *)placeHolder {
     _placeHolder = placeHolder;
     [self.inputTextCell setPlaceHolder:placeHolder];
+}
+
+- (void)setPlaceHolderColor:(UIColor *)placeHolderColor {
+    _placeHolderColor = placeHolderColor;
+    [self.inputTextCell setPlaceHolderColor:placeHolderColor];
 }
 
 - (void)setTextFont:(UIFont *)textFont {
@@ -191,6 +205,7 @@
             //开始移动
             if (@available(iOS 9.0, *)) {
                 _beginDragPoint = point;
+                [self.removeAreaButton setTitle:@"拖动到此处删除" forState:UIControlStateNormal];
                 self.removeAreaButton.hidden = NO;
                 [self.contentCollectionView beginInteractiveMovementForItemAtIndexPath:indexPath];
             } else {
@@ -201,6 +216,14 @@
             //移动过程中更新位置坐标
             if (@available(iOS 9.0, *)) {
                 [self.contentCollectionView updateInteractiveMovementTargetPosition:point];
+                CGPoint location = [longPress locationInView:self];
+                if (_dragItemIndexPath && CGRectContainsPoint(self.removeAreaButton.frame, location)) {
+                    [self.removeAreaButton setTitle:@"松手即可删除" forState:UIControlStateNormal];
+                    self.removeAreaButton.alpha = .6f;
+                } else {
+                    [self.removeAreaButton setTitle:@"拖动到此处删除" forState:UIControlStateNormal];
+                    self.removeAreaButton.alpha = 1.f;
+                }
             } else {
                 // Fallback on earlier versions
             }
@@ -208,14 +231,13 @@
         case UIGestureRecognizerStateEnded:
             //停止移动调用此方法
             if (@available(iOS 9.0, *)) {
+                self.removeAreaButton.alpha = 1.f;
                 [self.contentCollectionView endInteractiveMovement];
                 //判断位置是否在删除区域
                 CGPoint location = [longPress locationInView:self];
-                if (CGRectContainsPoint(self.removeAreaButton.frame, location)) {
-                    if (_dragItemIndexPath) {
-                        [_selectImages removeObjectAtIndex:_dragItemIndexPath.item];
-                        [self.contentCollectionView reloadData];
-                    }
+                if (_dragItemIndexPath && CGRectContainsPoint(self.removeAreaButton.frame, location)) {
+                    [_selectImages removeObjectAtIndex:_dragItemIndexPath.item];
+                    [self.contentCollectionView reloadData];
                 }
                 self.removeAreaButton.hidden = YES;
                 _dragItemIndexPath = nil;
@@ -263,6 +285,7 @@
         [self.inputTextCell setTextColor:_textColor];
         [self.inputTextCell setFont:_textFont];
         [self.inputTextCell setPlaceHolder:_placeHolder];
+        [self.inputTextCell setBackgroundColor:self.backgroundColor];
         return self.inputTextCell;
     } else if (section == 1) {
         MWImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
@@ -465,20 +488,6 @@
         _removeAreaButton.titleLabel.font = [UIFont systemFontOfSize:14.f];
         [_removeAreaButton setImage:[MWImageHelper loadImageWithName:@"remove"] forState:UIControlStateNormal];
         [_removeAreaButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_removeAreaButton setTitle:@"拖动到此处删除" forState:UIControlStateNormal];
-        
-        /** 设置图片文字上下样式 */
-        CGFloat space = 5.f;    //图片与文字间距
-        
-        CGFloat imageWith = _removeAreaButton.imageView.image.size.width;
-        CGFloat imageHeight = _removeAreaButton.imageView.image.size.height;
-        CGFloat labelWidth = _removeAreaButton.titleLabel.intrinsicContentSize.width;
-        CGFloat labelHeight = _removeAreaButton.titleLabel.intrinsicContentSize.height;
-        
-        UIEdgeInsets imageEdgeInsets = UIEdgeInsetsMake(-labelHeight-space/2.0, 0, 0, -labelWidth);
-        UIEdgeInsets labelEdgeInsets = UIEdgeInsetsMake(0, -imageWith, -imageHeight-space/2.0, 0);
-        _removeAreaButton.titleEdgeInsets = labelEdgeInsets;
-        _removeAreaButton.imageEdgeInsets = imageEdgeInsets;
     }
     return _removeAreaButton;
 }

@@ -57,6 +57,15 @@
     [self.placeHolderLabel sizeToFit];
 }
 
+- (void)setPlaceHolderColor:(UIColor *)placeHolderColor {
+    self.placeHolderLabel.textColor = placeHolderColor;
+}
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
+    [super setBackgroundColor:backgroundColor];
+    self.inputTextView.backgroundColor = backgroundColor;
+}
+
 - (void)resignTextViewFisrtResponder {
     [self.inputTextView resignFirstResponder];
 }
@@ -80,7 +89,6 @@
 - (UITextView *)inputTextView {
     if (!_inputTextView) {
         self.inputTextView = [[UITextView alloc] init];
-        _inputTextView.font = [UIFont systemFontOfSize:16.f];
         _inputTextView.delegate = self;
         _inputTextView.contentInset = UIEdgeInsetsZero;
         _inputTextView.textContainer.lineFragmentPadding = 0;
@@ -93,9 +101,7 @@
 - (UILabel *)placeHolderLabel {
     if (!_placeHolderLabel) {
         self.placeHolderLabel = [[UILabel alloc] initWithFrame:self.inputTextView.bounds];
-        _placeHolderLabel.font = [UIFont systemFontOfSize:16.f];
         _placeHolderLabel.font = self.inputTextView.font;
-        _placeHolderLabel.textColor = [UIColor lightGrayColor];
         _placeHolderLabel.text = @"请输入内容";
         _placeHolderLabel.numberOfLines = 0;
         [_placeHolderLabel sizeToFit];

@@ -24,7 +24,7 @@
     publishView.leftRightMargin = 20.f;
     publishView.placeHolder = @"哈哈哈";
     publishView.customImageNames = @[@"zl_btn_selected",@"zl_btn_unselected",@"zl_navBack"];
-    publishView.textColor = [UIColor blackColor];
+    publishView.textColor = [UIColor redColor];
     publishView.textFont = [UIFont systemFontOfSize:20];
     publishView.navBarColor = [UIColor whiteColor];
     publishView.navTitleColor = [UIColor blackColor];
@@ -32,6 +32,9 @@
     publishView.bottomBtnsNormalTitleColor = [UIColor blackColor];
     publishView.bottomBtnsDisableBgColor = [UIColor grayColor];
     publishView.enablePreview = NO;
+    publishView.backgroundColor = [UIColor blackColor];
+    publishView.placeHolderColor = [UIColor whiteColor];
+    publishView.removeAreaHeight = 100.f;
     
     MWImageObject *test = [[MWImageObject alloc] init];
     test.type = MWImageObjectTypeUrl;
